@@ -5,7 +5,7 @@ VERSION=$(node -pe "require('./package.json').version")
 
 echo hello
 # Increment the version number using the npm version command
-npm version patch
+npm version patch --no-git-tag-version
 npm run lint:fix
 
 # Add the updated package.json to the commit
