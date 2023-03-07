@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo hello
+# Increment the version number using the npm version command
+npm version patch --no-git-tag-version
+npm run lint:fix
+
+# Add the updated package.json to the commit
+git add package.json

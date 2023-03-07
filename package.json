@@ -1,12 +1,12 @@
 {
   "name": "em-gen",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "precommit": "bash precommit.sh",
-    "prepare": "husky install",
+    "prepare": "husky install && npx husky add .husky/pre-commit",
     "lint": "eslint --ext .tsx --ignore-path .gitignore . templates/",
     "lint:fix": "eslint --ext .ts --ignore-path .gitignore --fix",
     "build": "npx tsc",
