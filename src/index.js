@@ -1,5 +1,6 @@
 import { Command } from 'commander'
 import pjson from '../package.json' assert {type: 'json'}
+import { generateTemplate } from './utils/generateTemplate.js'
 
 const { version, description } = pjson
 const program = new Command()
@@ -9,6 +10,6 @@ program
 	.description(description)
 	.command('init')
 	.action(() => {
-		console.log('init 23')
+		generateTemplate('init')
 	})
 	.parse(process.argv)
