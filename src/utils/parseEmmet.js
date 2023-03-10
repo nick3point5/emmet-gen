@@ -5,11 +5,12 @@ export function parseEmmet(string) {
 	const regexArray = []
 	const regexOptions = {
 		nameRegex: '\\w+',
-		idRegex: `\\#\\w+`,
-		classRegex: `\\.\\w+`,
-		siblingRegex: `\\+\\w+`,
-		childRegex: `\\>\\w+`,
-		upRegex: `\\^\\w+`,
+		idRegex: `\\#`,
+		classRegex: `\\.`,
+		siblingRegex: `\\+`,
+		childRegex: `\\>`,
+		upRegex: `\\^`,
+		emptyRegex: `(\\\\|\\/)`,
 	}
 
 	for (const regex in regexOptions) {
@@ -65,9 +66,19 @@ class EmmetToken {
 				type = 'up'
 				name = tokenString.substring(1)
 				break;
+
+			case '\\':
+				type = 'empty'
+				name = tokenString.substring(1)
+				break;
+
+			case '/':
+				type = 'empty'
+				name = tokenString.substring(1)
+				break;
 		
 			default:
-				type = 'root'
+				type = 'name'
 				name = tokenString
 				break;
 		}

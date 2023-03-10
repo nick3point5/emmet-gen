@@ -3,52 +3,90 @@ import fs from 'fs'
 
 export function parseTokens(emmetTokens) {
 	let location = process.cwd()
-	let previous = null
-	let parents = []
+	let previousTemplate = null
+	let previousOperation = null
+	let parentStack = []
 	let root = null
+	let operation = null
 
 	for (let i = 0; i < emmetTokens.length; i++) {
 		const token = emmetTokens[i]
-		let template
 
-		if(token.type === 'root') {
-			template = new Template({name: token.name, location})
-			root = template
+		if(token.type === 'name') {
+			let template = new Template({name: token.name, location, operation, previous: previousTemplate})
+
+			operation = null
+			location = template.location
+
+			if(!root) {
+				root = template
+			}
+
+			previousTemplate = template
+
+		} else {
+			operation = token.type
+			if(token.type === 'sibling') {
+				location = previousTemplate.location
+			}
+			if(token.type === 'child') {
+				parentStack.push(previousTemplate)
+			}
+			if(token.type === 'up') {
+				previousTemplate = parentStack.pop()
+			}
+			if(previousOperation === 'empty') {
+				parentStack.push(previousTemplate)
+			}
+
+			previousOperation = token.type
 		}
 
-		if(token.type === 'sibling') {
-			template = new Template({name: token.name, location})
-			previous.nextSibling = template
-		}
-
-		if(token.type === 'child') {
-			location += `\\${previous.name}`
-			parents.push(previous)
-			template = new Template({name: token.name, location})
-			previous.child = template
-		}
-
-		if(token.type === 'up') {
-			previous = parents.pop(previous)
-			location = previous.location
-			template = new Template({name: token.name, location})
-			previous.nextSibling = template
-		}
-
-		previous = template
 	}
 
 	return root
 }
 
 class Template {
-	constructor({name, location, type="default", nextSibling=null, child=null}) {
+	constructor({name, location, type="default", nextSibling=null, child=null, operation=null, previous=null,}) {
 		this.name = name
 		this.type = type
 		this.templateSrc = this.getMatchingTemplate(type)
 		this.location = location
 		this.child = child
 		this.nextSibling = nextSibling
+		this.operate(operation, previous)
+	}
+
+	operate(operation, previous) {
+		switch (operation) {
+			case 'sibling':
+				previous.nextSibling = this
+				this.location = previous.location
+				break
+			case 'child':
+				previous.child = this
+				this.location += `\\${previous.name}`
+				break
+			case 'up':
+				this.location = previous.location
+				previous.nextSibling = this
+				break
+			case 'empty':
+				if(previous && this.location !== previous.location) {
+					previous.child = this
+					this.location += `\\${previous.name}`
+				} else if(previous) {
+					previous.nextSibling = this
+				}
+
+				this.type = 'empty'
+				this.templateSrc = this.getMatchingTemplate('empty')
+				break
+
+			default:
+				break
+		}
 	}
 
 	getMatchingTemplate(type) {
@@ -61,7 +99,5 @@ class Template {
 		}
 		
 		return `${templatePath}\\${type}`
-	
-	
 	}
 }
