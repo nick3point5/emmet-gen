@@ -11,6 +11,7 @@ export function parseEmmet(string) {
 		upRegex: `\\^`,
 		emptyRegex: `(\\\\|\\/)`,
 		multiplyRegex: `\\*\\d+`,
+		multiplyStartRegex: `\\@\\d+`,
 		nameRegex: '(\\w+|\\$+)+',
 	}
 
@@ -80,6 +81,11 @@ class EmmetToken {
 
 			case '*':
 				type = 'multiply'
+				name = tokenString.substring(1)
+				break;
+
+			case '@':
+				type = 'multiplyStart'
 				name = tokenString.substring(1)
 				break;
 		

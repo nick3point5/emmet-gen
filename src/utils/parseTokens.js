@@ -10,6 +10,7 @@ export function parseTokens(emmetTokens) {
 	let root = null
 	let operation = null
 	let parentType = 'default'
+	let multiplyStart = 1
 
 	for (let i = 0; i < emmetTokens.length; i++) {
 		const token = emmetTokens[i]
@@ -71,11 +72,11 @@ export function parseTokens(emmetTokens) {
 
 				const countName = previousTemplate.name
 
-				let count = String(1).padStart(countLength,'0')
+				let count = String(multiplyStart).padStart(countLength,'0')
 				previousTemplate.name = countName.replace(/\$+/g, count)
 
 				const n = Number(token.name)
-				for (let i = 1; i < n; i++) {
+				for (let i = multiplyStart; i < n; i++) {
 					let count = String(i+1).padStart(countLength,'0')
 					const name = countName.replace(/\$+/g, count)
 
@@ -83,7 +84,13 @@ export function parseTokens(emmetTokens) {
 
 					previousTemplate = template
 				}
+
+				multiplyStart = 1
 			}
+			if(token.type === 'multiplyStart') {
+				multiplyStart = Number(token.name)
+			}
+
 
 			previousOperation = token.type
 		}
