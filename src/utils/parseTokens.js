@@ -61,6 +61,29 @@ export function parseTokens(emmetTokens) {
 				parentTypeStack.push(parentType)
 				location = previousTemplate.getChildLocation()
 			}
+			if(token.type === 'multiply') {
+				const match = previousTemplate.name.match(/\$+/g)
+				if(!match) {
+					console.error('root template must have "$" in name')
+				}
+
+				const countLength = match[0].length
+
+				const countName = previousTemplate.name
+
+				let count = String(1).padStart(countLength,'0')
+				previousTemplate.name = countName.replace(/\$+/g, count)
+
+				const n = Number(token.name)
+				for (let i = 1; i < n; i++) {
+					let count = String(i+1).padStart(countLength,'0')
+					const name = countName.replace(/\$+/g, count)
+
+					let template = new Template({name: name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type})
+
+					previousTemplate = template
+				}
+			}
 
 			previousOperation = token.type
 		}
@@ -128,7 +151,7 @@ class Template {
 		for (let i = 0; i < srcDir.length; i++) {
 			const template = srcDir[i];
 			if(!(/__TemplateName__/g).test(template) || srcDir.length > 1) {
-				console.error(`there must be exactly 1 directory with a name containing "__TemplateName__" in the template: ${type}`)
+				console.error(`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`)
 				process.exit(1)
 			}
 			

@@ -4,13 +4,14 @@ import {generateTemplate} from './generateTemplate.js'
 export function parseEmmet(string) {
 	const regexArray = []
 	const regexOptions = {
-		nameRegex: '\\w+',
 		idRegex: `\\#`,
 		classRegex: `\\.`,
 		siblingRegex: `\\+`,
 		childRegex: `\\>`,
 		upRegex: `\\^`,
 		emptyRegex: `(\\\\|\\/)`,
+		multiplyRegex: `\\*\\d+`,
+		nameRegex: '(\\w+|\\$+)+',
 	}
 
 	for (const regex in regexOptions) {
@@ -74,6 +75,11 @@ class EmmetToken {
 
 			case '/':
 				type = 'empty'
+				name = tokenString.substring(1)
+				break;
+
+			case '*':
+				type = 'multiply'
 				name = tokenString.substring(1)
 				break;
 		
