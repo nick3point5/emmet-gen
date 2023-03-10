@@ -1,7 +1,10 @@
+import path from 'path'
+import fs from 'fs'
+
 export function parseTokens(emmetTokens) {
 	let location = process.cwd()
 	let previous = null
-	let parent = null
+	let parents = []
 	let root = null
 
 	for (let i = 0; i < emmetTokens.length; i++) {
@@ -20,14 +23,14 @@ export function parseTokens(emmetTokens) {
 
 		if(token.type === 'child') {
 			location += `\\${previous.name}`
-			parent = previous
+			parents.push(previous)
 			template = new Template({name: token.name, location})
 			previous.child = template
 		}
 
 		if(token.type === 'up') {
-			previous = parent
-			location = location.replace(/\\\\\w+$/g,"")
+			previous = parents.pop(previous)
+			location = previous.location
 			template = new Template({name: token.name, location})
 			previous.nextSibling = template
 		}
@@ -42,8 +45,23 @@ class Template {
 	constructor({name, location, type="default", nextSibling=null, child=null}) {
 		this.name = name
 		this.type = type
+		this.templateSrc = this.getMatchingTemplate(type)
 		this.location = location
 		this.child = child
 		this.nextSibling = nextSibling
+	}
+
+	getMatchingTemplate(type) {
+		const templatePath = path.resolve(`${process.cwd()}/em-gen-templates`)
+		const templates = fs.readdirSync(templatePath)
+	
+		if(!templates.includes(type)) {
+			console.log(`no template ${type} found in the em-gen-templates`)
+			process.exit(1)
+		}
+		
+		return `${templatePath}\\${type}`
+	
+	
 	}
 }
