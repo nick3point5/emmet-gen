@@ -1,15 +1,28 @@
 import { Command } from 'commander'
-import pjson from '../package.json' assert {type: 'json'}
-import { generateTemplate } from './utils/generateTemplate.js'
+import pkg from '../package.json' assert {type: 'json'}
+import { parseEmmet } from './utils/parseEmmet.js'
+import  { generateInit } from './utils/generateInit.js'
 
-const { version, description } = pjson
+const { version, description } = pkg
 const program = new Command()
 
 program
 	.version(version)
 	.description(description)
+
+program
 	.command('init')
-	.action(() => {
-		generateTemplate('init')
+	.description(description)
+	.argument('[type]')
+	.action((type) => {
+		generateInit(type)
+		}
+	)
+
+program
+	.argument('[emmet]')
+	.action((emmet) => {
+		parseEmmet(emmet)
 	})
-	.parse(process.argv)
+
+program.parse();
