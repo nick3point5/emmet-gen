@@ -12,7 +12,7 @@ export function generateTemplate(root) {
 			nextLevel.push(child)
 		}
 
-		createTemplate(templateSrc, location, name)
+		createTemplate(templateSrc, location, template)
 
 		if(nextSibling) {
 			queue.push(nextSibling)
@@ -25,7 +25,7 @@ export function generateTemplate(root) {
 	}
 }
 
-function createTemplate(source, destination, name) {
+function createTemplate(source, destination, template) {
 	const items = fs.readdirSync(source)
 
 	const files = []
@@ -45,19 +45,20 @@ function createTemplate(source, destination, name) {
 	for (let i = 0; i < directories.length; i++) {
 		const srcDir = `${source}\\${directories[i]}`
 		let destDir = `${destination}\\${directories[i]}`
-			.replace(/__TemplateName__/g, name)
+			.replace(/__TemplateName__/g, template.name)
 
 		fs.mkdirSync(destDir, { recursive: true})
-		createTemplate(srcDir, destDir, name)
+
+		createTemplate(srcDir, destDir, template)
 	}
 
 	for (let i = 0; i < files.length; i++) {
 		const srcFile = `${source}\\${files[i]}`
 		const destFile = `${destination}\\${files[i]}`
-			.replace(/__TemplateName__/g, name)
+			.replace(/__TemplateName__/g, template.name)
 
 		let fileContent = fs.readFileSync(srcFile,"utf8")
-			.replace(/__TemplateName__/g, name)
+			.replace(/__TemplateName__/g, template.name)
 
 		fs.writeFileSync(destFile, fileContent)
 	}
