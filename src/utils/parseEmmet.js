@@ -12,6 +12,8 @@ export function parseEmmet(string) {
 		emptyRegex: `(\\\\|\\/)`,
 		multiplyRegex: `\\*\\d+`,
 		multiplyStartRegex: `\\@\\d+`,
+		openGroupRegex: `\\(`,
+		closeGroupRegex: `\\)`,
 		nameRegex: '(\\w+|\\$+)+',
 	}
 
@@ -32,7 +34,7 @@ export function parseEmmet(string) {
 
 		emmetTokens.push(new EmmetToken(tokenString))
 	}
-	const rootTemplate = parseTokens(emmetTokens)
+	const rootTemplate = parseTokens(emmetTokens, process.cwd())
 	generateTemplate(rootTemplate)
 
 }
@@ -88,6 +90,17 @@ class EmmetToken {
 				type = 'multiplyStart'
 				name = tokenString.substring(1)
 				break;
+
+			case '(':
+				type = 'openGroup'
+				name = tokenString.substring(1)
+				break;
+
+			case ')':
+				type = 'closeGroup'
+				name = tokenString.substring(1)
+				break;
+
 		
 			default:
 				type = 'name'

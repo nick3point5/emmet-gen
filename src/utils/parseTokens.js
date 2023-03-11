@@ -1,8 +1,8 @@
 import path from 'path'
 import fs from 'fs'
 
-export function parseTokens(emmetTokens) {
-	let location = process.cwd()
+export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength = null, groupCount = null) {
+	let location = rootSrc
 	let previousTemplate = null
 	let previousOperation = null
 	let parentStack = []
@@ -11,9 +11,21 @@ export function parseTokens(emmetTokens) {
 	let operation = null
 	let parentType = 'default'
 	let multiplyStart = 1
+	let layer = 1
+	const group = []
+	const groupTokens = []
+	const groupLinks = []
+	let groupLink = {
+		template: null,
+		type: null
+	}
 
 	for (let i = 0; i < emmetTokens.length; i++) {
 		const token = emmetTokens[i]
+
+		if(groupTokens.length > 0) {
+			groupTokens.push(token)
+		}
 
 		if(token.type === 'name') {
 			if(operation === 'class') {
@@ -28,9 +40,19 @@ export function parseTokens(emmetTokens) {
 				continue
 			}
 
-			let type = parentType
+			if(groupCountLength) {
+				const match = token.name.match(/\$+/g)
+				if(match) {
+					groupCountLength = match[0].length
+				}
+			}
 
-			let template = new Template({name: token.name, location, operation, previous: previousTemplate, type})
+			const type = parentType
+			const name = (!groupCount) 
+				? token.name 
+				: replaceCountMarker(token.name, groupCount, groupCountLength)
+
+			let template = new Template({name, location, operation, previous: previousTemplate, type})
 
 			operation = null
 			location = template.location
@@ -51,16 +73,19 @@ export function parseTokens(emmetTokens) {
 				parentStack.push(previousTemplate)
 				parentTypeStack.push(parentType)
 				parentType = previousTemplate.type
+				layer++
 			}
 			if(token.type === 'up') {
 				previousTemplate = parentStack.pop()
 				parentType = parentTypeStack.pop()
 				location = previousTemplate.location
+				layer--
 			}
 			if(previousOperation === 'empty') {
 				parentStack.push(previousTemplate)
 				parentTypeStack.push(parentType)
 				location = previousTemplate.getChildLocation()
+				layer++
 			}
 			if(token.type === 'multiply') {
 				const match = previousTemplate.name.match(/\$+/g)
@@ -70,25 +95,89 @@ export function parseTokens(emmetTokens) {
 
 				const countLength = match[0].length
 
-				const countName = previousTemplate.name
+				if(previousOperation === 'closeGroup') {
+					groupTokens.pop()
+					groupTokens.pop()
+					const captureTokens = []
+					let groupToken
+					while (groupToken?.type !== 'openGroup') {
+						groupToken = groupTokens.pop()
+						captureTokens.unshift(groupToken)
+					}
 
-				let count = String(multiplyStart).padStart(countLength,'0')
-				previousTemplate.name = countName.replace(/\$+/g, count)
+					captureTokens.shift()
 
-				const n = Number(token.name)
-				for (let i = multiplyStart; i < n; i++) {
-					let count = String(i+1).padStart(countLength,'0')
-					const name = countName.replace(/\$+/g, count)
+					const n = Number(token.name)
 
-					let template = new Template({name: name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type})
+					let groupTemplate
 
-					previousTemplate = template
+					function linkGroup(groupLink, groupTemplate) {
+						if(groupLink.type === 'sibling') {
+							let next = groupLink.template
+							while(next.nextSibling) {
+								next = next.nextSibling
+							}
+							next.nextSibling = groupTemplate
+						}
+						if(groupLink.type === 'child') {
+							groupLink.template.child = groupTemplate
+						}
+					}
+
+					let groupSrc = groupLink.template.location
+
+					if(groupLink.type === 'child') {
+						groupSrc = groupLink.template.getChildLocation()
+					}
+
+					
+
+					for (let i = multiplyStart-1; i < n; i++) {
+						groupTemplate = parseTokens(captureTokens, groupSrc, 1, i+1)
+						linkGroup(groupLink, groupTemplate)
+						groupLink.template = groupTemplate
+						groupLink.type = 'sibling'
+						previousTemplate = groupTemplate
+					}
+
+				}else {
+					const countName = previousTemplate.name
+
+					previousTemplate.name = replaceCountMarker(countName, multiplyStart, countLength)
+					
+					const n = Number(token.name)
+					for (let i = multiplyStart; i < n; i++) {
+						const name = replaceCountMarker(countName, i+1, countLength)
+	
+						let template = new Template({name: name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type})
+	
+						previousTemplate = template
+					}
 				}
 
 				multiplyStart = 1
 			}
 			if(token.type === 'multiplyStart') {
 				multiplyStart = Number(token.name)
+			}
+			if(token.type === 'openGroup') {
+				group.push(layer)
+				groupTokens.push(token)
+				groupLink = {
+					template: previousTemplate,
+					type: previousOperation
+				}
+				groupLinks.push(groupLink)
+
+			}
+			if(token.type === 'closeGroup') {
+				const openLayer = group.pop(layer)
+				while(openLayer !== layer) {
+					previousTemplate = parentStack.pop()
+					parentType = parentTypeStack.pop()
+					layer--
+				}
+				groupLink = groupLinks.pop()
 			}
 
 
@@ -183,4 +272,11 @@ class Template {
 		this.templateSrc = this.getMatchingTemplate(type)
 
 	}
+}
+
+
+function replaceCountMarker(name, count,countLength) {
+	let countName = String(count).padStart(countLength,'0')
+	return name.replace(/\$+/g, countName)
+
 }
