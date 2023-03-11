@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import { getReplacementMap } from './getReplacementMap.js'
 
 export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength = null, groupCount = null) {
 	let location = rootSrc
@@ -12,7 +13,7 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 	let parentType = 'default'
 	let multiplyStart = 1
 	let layer = 1
-	const group = []
+	const groupLayer = []
 	const groupTokens = []
 	const groupLinks = []
 	let groupLink = {
@@ -29,19 +30,19 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 
 		if(token.type === 'name') {
 			if(operation === 'class') {
-				previousTemplate.setClass(token.name)
+				previousTemplate.setClass(token.value)
 				operation = null
 				continue
 			}
 
 			if(operation === 'id') {
-				previousTemplate.setId(token.name)
+				previousTemplate.setId(token.value)
 				operation = null
 				continue
 			}
 
 			if(groupCountLength) {
-				const match = token.name.match(/\$+/g)
+				const match = token.value.match(/\$+/g)
 				if(match) {
 					groupCountLength = match[0].length
 				}
@@ -49,8 +50,8 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 
 			const type = parentType
 			const name = (!groupCount) 
-				? token.name 
-				: replaceCountMarker(token.name, groupCount, groupCountLength)
+				? token.value 
+				: replaceCountMarker(token.value, groupCount, groupCountLength)
 
 			let template = new Template({name, location, operation, previous: previousTemplate, type})
 
@@ -107,7 +108,7 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 
 					captureTokens.shift()
 
-					const n = Number(token.name)
+					const n = Number(token.value)
 
 					let groupTemplate
 
@@ -145,11 +146,11 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 
 					previousTemplate.name = replaceCountMarker(countName, multiplyStart, countLength)
 					
-					const n = Number(token.name)
+					const n = Number(token.value)
 					for (let i = multiplyStart; i < n; i++) {
 						const name = replaceCountMarker(countName, i+1, countLength)
 	
-						let template = new Template({name: name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type})
+						let template = new Template({name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type})
 	
 						previousTemplate = template
 					}
@@ -158,10 +159,10 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 				multiplyStart = 1
 			}
 			if(token.type === 'multiplyStart') {
-				multiplyStart = Number(token.name)
+				multiplyStart = Number(token.value)
 			}
 			if(token.type === 'openGroup') {
-				group.push(layer)
+				groupLayer.push(layer)
 				groupTokens.push(token)
 				groupLink = {
 					template: previousTemplate,
@@ -171,7 +172,7 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 
 			}
 			if(token.type === 'closeGroup') {
-				const openLayer = group.pop(layer)
+				const openLayer = groupLayer.pop(layer)
 				while(openLayer !== layer) {
 					previousTemplate = parentStack.pop()
 					parentType = parentTypeStack.pop()
@@ -179,7 +180,9 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 				}
 				groupLink = groupLinks.pop()
 			}
-
+			if(token.type === 'attr') {
+				previousTemplate.setReplacements(token.value)
+			}
 
 			previousOperation = token.type
 		}
@@ -190,13 +193,14 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 }
 
 class Template {
-	constructor({name, location, type="default", nextSibling=null, child=null, operation=null, previous=null,}) {
+	constructor({name, location, type="default", nextSibling=null, child=null, operation=null, previous=null}) {
 		this.name = name
 		this.type = type
 		this.templateSrc = this.getMatchingTemplate(type)
 		this.location = location
 		this.child = child
 		this.nextSibling = nextSibling
+		this.replacements = null
 		this.operate(operation, previous)
 	}
 
@@ -270,13 +274,14 @@ class Template {
 
 	setId(type) {
 		this.templateSrc = this.getMatchingTemplate(type)
+	}
 
+	setReplacements(attr) {
+		this.replacements = getReplacementMap(attr)
 	}
 }
-
 
 function replaceCountMarker(name, count,countLength) {
 	let countName = String(count).padStart(countLength,'0')
 	return name.replace(/\$+/g, countName)
-
 }

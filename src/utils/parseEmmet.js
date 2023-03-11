@@ -14,6 +14,7 @@ export function parseEmmet(string) {
 		multiplyStartRegex: `\\@\\d+`,
 		openGroupRegex: `\\(`,
 		closeGroupRegex: `\\)`,
+		attrRegex: `\\[.*\\]`,
 		nameRegex: '(\\w+|\\$+)+',
 	}
 
@@ -43,73 +44,78 @@ class EmmetToken {
 	constructor(tokenString) {
 		const firstChar = tokenString[0]
 		let type
-		let name
+		let value
 
 		switch (firstChar) {
 			case '.':
 				type = 'class'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '#':
 				type = 'id'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '+':
 				type = 'sibling'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '>':
 				type = 'child'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '^':
 				type = 'up'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '\\':
 				type = 'empty'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '/':
 				type = 'empty'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '*':
 				type = 'multiply'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '@':
 				type = 'multiplyStart'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case '(':
 				type = 'openGroup'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
 				break;
 
 			case ')':
 				type = 'closeGroup'
-				name = tokenString.substring(1)
+				value = tokenString.substring(1)
+				break;
+
+			case '[':
+				type = 'attr'
+				value = tokenString.substring(1, tokenString.length-1)
 				break;
 
 		
 			default:
 				type = 'name'
-				name = tokenString
+				value = tokenString
 				break;
 		}
 
 		this.type = type
-		this.name = name
+		this.value = value
 	}
 }
 
