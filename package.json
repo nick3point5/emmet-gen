@@ -1,6 +1,6 @@
 {
   "name": "em-gen",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "em-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
