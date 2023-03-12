@@ -1,3 +1,5 @@
 node_modules/
 dist/
 test/
+em-gen-templates/
+em-gen-templates.json

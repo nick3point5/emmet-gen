@@ -1,5 +1,4 @@
-import {parseTokens} from './parseTokens.js'
-import {generateTemplate} from './generateTemplate.js'
+
 
 export function parseEmmet(string, settings) {
 	const regexArray = []
@@ -23,7 +22,6 @@ export function parseEmmet(string, settings) {
 		regexArray.push(regexString)
 	}
 
-
 	const emmetRegex = new RegExp(`(${regexArray.join('|')})`,'g')
 
 	const emmetStrings = string.match(emmetRegex)
@@ -35,9 +33,8 @@ export function parseEmmet(string, settings) {
 
 		emmetTokens.push(new EmmetToken(tokenString))
 	}
-	const rootTemplate = parseTokens(emmetTokens, settings)
-	generateTemplate(rootTemplate, settings)
 
+	return emmetTokens
 }
 
 class EmmetToken {
