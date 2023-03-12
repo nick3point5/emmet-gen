@@ -2,8 +2,8 @@ import path from 'path'
 import fs from 'fs'
 import { getReplacementMap } from './getReplacementMap.js'
 
-export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength = null, groupCount = null) {
-	let location = rootSrc
+export function parseTokens(emmetTokens, settings, rootSrc=null, groupCountLength = null, groupCount = null) {
+	let location = rootSrc || settings.baseUrl
 	let previousTemplate = null
 	let previousOperation = null
 	let parentStack = []
@@ -30,13 +30,13 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 
 		if(token.type === 'name') {
 			if(operation === 'class') {
-				previousTemplate.setClass(token.value)
+				previousTemplate.setClass(token.value, settings)
 				operation = null
 				continue
 			}
 
 			if(operation === 'id') {
-				previousTemplate.setId(token.value)
+				previousTemplate.setId(token.value, settings)
 				operation = null
 				continue
 			}
@@ -53,7 +53,7 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 				? token.value 
 				: replaceCountMarker(token.value, groupCount, groupCountLength)
 
-			let template = new Template({name, location, operation, previous: previousTemplate, type})
+			let template = new Template({name, location, operation, previous: previousTemplate, type, settings})
 
 			operation = null
 			location = template.location
@@ -134,7 +134,7 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 					
 
 					for (let i = multiplyStart-1; i < n; i++) {
-						groupTemplate = parseTokens(captureTokens, groupSrc, 1, i+1)
+						groupTemplate = parseTokens(captureTokens, settings, groupSrc, 1, i+1)
 						linkGroup(groupLink, groupTemplate)
 						groupLink.template = groupTemplate
 						groupLink.type = 'sibling'
@@ -193,18 +193,18 @@ export function parseTokens(emmetTokens, rootSrc=process.cwd(), groupCountLength
 }
 
 class Template {
-	constructor({name, location, type="default", nextSibling=null, child=null, operation=null, previous=null}) {
+	constructor({name, location, type="default", nextSibling=null, child=null, operation=null, previous=null,settings=null}) {
 		this.name = name
 		this.type = type
-		this.templateSrc = this.getMatchingTemplate(type)
+		this.templateSrc = this.getMatchingTemplate(type, settings)
 		this.location = location
 		this.child = child
 		this.nextSibling = nextSibling
 		this.replacements = null
-		this.operate(operation, previous)
+		this.operate(operation, previous, settings)
 	}
 
-	operate(operation, previous) {
+	operate(operation, previous, settings) {
 		switch (operation) {
 			case 'sibling':
 				previous.nextSibling = this
@@ -228,7 +228,7 @@ class Template {
 				}
 
 				this.type = 'empty'
-				this.templateSrc = this.getMatchingTemplate('empty')
+				this.templateSrc = this.getMatchingTemplate('empty', settings)
 				break
 
 			default:
@@ -236,10 +236,10 @@ class Template {
 		}
 	}
 
-	getMatchingTemplate(type) {
-		const templatePath = path.resolve(`${process.cwd()}/em-gen-templates`)
+	getMatchingTemplate(type, settings) {
+		const templatePath = settings.templatesSource
 		const templates = fs.readdirSync(templatePath)
-	
+
 		if(!templates.includes(type)) {
 			console.error(`no template ${type} found in the em-gen-templates`)
 			process.exit(1)
@@ -254,7 +254,6 @@ class Template {
 				console.error(`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`)
 				process.exit(1)
 			}
-			
 		}
 
 		return templateSrc
@@ -267,13 +266,13 @@ class Template {
 		return `${this.location}/${templates[0]}`
 	}
 
-	setClass(type) {
+	setClass(type, settings) {
 		this.type = type
-		this.templateSrc = this.getMatchingTemplate(type)
+		this.templateSrc = this.getMatchingTemplate(type, settings)
 	}
 
-	setId(type) {
-		this.templateSrc = this.getMatchingTemplate(type)
+	setId(type, settings) {
+		this.templateSrc = this.getMatchingTemplate(type, settings)
 	}
 
 	setReplacements(attr) {

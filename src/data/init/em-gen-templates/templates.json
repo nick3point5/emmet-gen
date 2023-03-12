@@ -1,6 +1,0 @@
-{
-	"barrel_imports": false,
-	"templates": {
-		"default": "em-gen-templates/default"
-	}
-}

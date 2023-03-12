@@ -1,0 +1,6 @@
+{
+	"barrel_imports": false,
+	"relative": false,
+	"templatesSource": "./em-gen-templates",
+	"baseUrl": "./"
+}

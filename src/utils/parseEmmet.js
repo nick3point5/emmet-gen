@@ -1,7 +1,7 @@
 import {parseTokens} from './parseTokens.js'
 import {generateTemplate} from './generateTemplate.js'
 
-export function parseEmmet(string) {
+export function parseEmmet(string, settings) {
 	const regexArray = []
 	const regexOptions = {
 		idRegex: `\\#`,
@@ -35,8 +35,8 @@ export function parseEmmet(string) {
 
 		emmetTokens.push(new EmmetToken(tokenString))
 	}
-	const rootTemplate = parseTokens(emmetTokens, process.cwd())
-	generateTemplate(rootTemplate)
+	const rootTemplate = parseTokens(emmetTokens, settings)
+	generateTemplate(rootTemplate, settings)
 
 }
 

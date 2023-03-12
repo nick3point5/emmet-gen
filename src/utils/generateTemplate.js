@@ -59,7 +59,7 @@ function createTemplate(source, destination, template) {
 
 		let fileContent = fs.readFileSync(srcFile,"utf8")
 
-		template.replacements.forEach((value, key)=> {
+		template.replacements?.forEach((value, key)=> {
 			fileContent = fileContent.replaceAll(key, value)
 		})
 
