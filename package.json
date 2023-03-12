@@ -1,7 +1,7 @@
 {
-  "name": "em-gen",
-  "version": "0.5.10",
-  "description": "em-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
+  "name": "emmet-gen",
+  "version": "0.5.12",
+  "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -37,12 +37,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nick3point5/em-gen.git"
+    "url": "git+https://github.com/nick3point5/emmet-gen.git"
   },
   "bugs": {
-    "url": "https://github.com/nick3point5/em-gen/issues"
+    "url": "https://github.com/nick3point5/emmet-gen/issues"
   },
-  "homepage": "https://github.com/nick3point5/em-gen#readme",
+  "homepage": "https://github.com/nick3point5/emmet-gen#readme",
   "husky": {
     "hooks": {
       "pre-commit": "npm run precommit"

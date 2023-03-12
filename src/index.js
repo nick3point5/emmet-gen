@@ -18,7 +18,7 @@ program
 
 program
 	.command('init')
-	.description('Generate the initial files for em-gen')
+	.description('Generate the initial files for emmet-gen')
 	.argument('[type]')
 	.action((type) => {
 		generateInit(type)

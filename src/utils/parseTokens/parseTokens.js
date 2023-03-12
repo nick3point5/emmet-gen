@@ -251,7 +251,7 @@ export class Template {
 		const templates = fs.readdirSync(templatePath)
 
 		if(!templates.includes(type)) {
-			console.error(`no template ${type} found in the em-gen-templates`)
+			console.error(`no template ${type} found in the emmet-gen-templates`)
 			process.exit(1)
 		}
 
