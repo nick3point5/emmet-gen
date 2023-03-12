@@ -196,7 +196,6 @@ describe('should parse tokens', () => {
 			previous = worldCopy
 		}
 
-		console.log(hello)
 
 		expect(root).toStrictEqual(hello)
 	})

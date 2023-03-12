@@ -10,6 +10,8 @@ import {generateTemplate} from './utils/generateTemplate/generateTemplate.js'
 const { version, description } = pkg
 const program = new Command()
 
+process.on('warning', e => console.warn(e.stack));
+
 program
 	.version(version)
 	.description(description)
