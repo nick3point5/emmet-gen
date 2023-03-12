@@ -1,5 +1,3 @@
 node_modules/
 dist/
 test/
-emmet-gen-templates/
-emmet-gen-templates.json
