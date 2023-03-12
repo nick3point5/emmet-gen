@@ -1,6 +1,6 @@
 {
   "name": "em-gen",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "em-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
@@ -8,6 +8,7 @@
     "precommit": "bash precommit.sh",
     "prepare": "husky install && npx husky add .husky/pre-commit",
     "start": "node ./src/index.js",
+    "test:gh": "node ./src/index.js init && vitest",
     "test": "vitest"
   },
   "keywords": [],
