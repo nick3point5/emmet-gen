@@ -1,6 +1,6 @@
 {
   "name": "em-gen",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "em-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
@@ -11,9 +11,22 @@
     "test:gh": "node ./src/index.js init && vitest",
     "test": "vitest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "generate",
+    "scaffolding",
+    "boilerplate",
+    "skeleton",
+    "generate-code",
+    "custom-files",
+    "generator",
+    "emmet",
+    "cli",
+    "command",
+    "command-line",
+    "template"
+  ],
+  "author": "nick3point5",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^8.35.0",
     "husky": "^8.0.3",
@@ -22,6 +35,14 @@
   "dependencies": {
     "commander": "^10.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick3point5/em-gen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nick3point5/em-gen/issues"
+  },
+  "homepage": "https://github.com/nick3point5/em-gen#readme",
   "husky": {
     "hooks": {
       "pre-commit": "npm run precommit"
