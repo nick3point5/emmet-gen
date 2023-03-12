@@ -187,7 +187,7 @@ describe('should parse tokens', () => {
 				name:`hello${i+1}`, 
 				location: settings.baseUrl, 
 				type:"default", 
-				nextSibling: world,
+				nextSibling: worldCopy,
 				settings
 			})
 	
@@ -195,17 +195,65 @@ describe('should parse tokens', () => {
 			if(i === 0) {
 				hello = helloCopy
 			} else {
-				// previous.nextSibling = helloCopy
+				previous.nextSibling = helloCopy
 			}
-			// previous = worldCopy
+			previous = worldCopy
 		}
 
 		console.log(hello)
 
 		expect(root).toStrictEqual(hello)
 	})
+	test('attr', () => {
+		const string = 'hello[world="yes"]'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken, settings)
+
+		const hello = new Template({
+			name:'hello', 
+			location: settings.baseUrl, 
+			type:"default", 
+			settings
+		})
+
+		const worldMap = new Map()
+		worldMap.set("world","yes")
+		hello.replacements = worldMap
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('attr*5', () => {
+		const string = 'hello$[world="yes"]*5'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken, settings)
+
+		let hello 
+		let previous
+
+		const worldMap = new Map()
+		worldMap.set("world","yes")
+
+		const n = 5
+		for (let i = 0; i < n; i++) {
+			const helloCopy = new Template({
+				name: `hello${i+1}`, 
+				location: settings.baseUrl, 
+				type:"default", 
+				previous,
+				settings
+			})
+			if(i === 0) {
+				hello = helloCopy
+			}else {
+				previous.nextSibling = helloCopy
+			}
+			helloCopy.replacements = worldMap
+			previous = helloCopy
+		}
+
+		expect(root).toStrictEqual(hello)
+	})
+
 })
-
-// describe('parse tokens into templates', () => {
-
-// })

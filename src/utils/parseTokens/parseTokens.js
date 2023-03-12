@@ -126,15 +126,16 @@ export function parseTokens(
 						if(groupLink.type === 'child') {
 							groupLink.template.child = groupTemplate
 						}
+						if(groupLink.type === null) {
+							root = groupTemplate
+						}
 					}
 
-					let groupSrc = groupLink.template.location
+					let groupSrc = groupLink.template?.location || location
 
 					if(groupLink.type === 'child') {
 						groupSrc = groupLink.template.getChildLocation()
 					}
-
-					
 
 					for (let i = multiplyStart-1; i < n; i++) {
 						groupTemplate = parseTokens(captureTokens, settings, groupSrc, 1, i+1)
@@ -145,6 +146,10 @@ export function parseTokens(
 					}
 
 				}else {
+					let replacementMap = null
+					if(previousOperation === 'attr') {
+						replacementMap = previousTemplate.replacements
+					}
 					const countName = previousTemplate.name
 
 					previousTemplate.name = replaceCountMarker(countName, multiplyStart, countLength)
@@ -154,6 +159,8 @@ export function parseTokens(
 						const name = replaceCountMarker(countName, i+1, countLength)
 	
 						let template = new Template({name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type, settings})
+
+						template.replacements = replacementMap
 	
 						previousTemplate = template
 					}
