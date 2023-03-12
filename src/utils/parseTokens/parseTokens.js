@@ -153,7 +153,7 @@ export function parseTokens(
 					for (let i = multiplyStart; i < n; i++) {
 						const name = replaceCountMarker(countName, i+1, countLength)
 	
-						let template = new Template({name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type})
+						let template = new Template({name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type, settings})
 	
 						previousTemplate = template
 					}

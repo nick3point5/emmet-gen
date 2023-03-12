@@ -1,32 +1,5 @@
-
-
-export function parseEmmet(string, settings) {
-	const regexArray = []
-	const regexOptions = {
-		idRegex: `\\#`,
-		classRegex: `\\.`,
-		siblingRegex: `\\+`,
-		childRegex: `\\>`,
-		upRegex: `\\^`,
-		emptyRegex: `(\\\\|\\/)`,
-		multiplyRegex: `\\*\\d+`,
-		multiplyStartRegex: `\\@\\d+`,
-		openGroupRegex: `\\(`,
-		closeGroupRegex: `\\)`,
-		attrRegex: `\\[.*\\]`,
-		nameRegex: '(\\w+|\\$+)+',
-	}
-
-	for (const regex in regexOptions) {
-		const regexString = regexOptions[regex];
-		regexArray.push(regexString)
-	}
-
-	const emmetRegex = new RegExp(`(${regexArray.join('|')})`,'g')
-
-	const emmetStrings = string.match(emmetRegex)
+export function parseEmmet(emmetStrings) {
 	const emmetTokens = []
-
 
 	for (let i = 0; i < emmetStrings.length; i++) {
 		const tokenString = emmetStrings[i];
@@ -37,7 +10,7 @@ export function parseEmmet(string, settings) {
 	return emmetTokens
 }
 
-class EmmetToken {
+export class EmmetToken {
 	constructor(tokenString) {
 		const firstChar = tokenString[0]
 		let type

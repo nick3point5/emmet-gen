@@ -3,8 +3,9 @@ import pkg from '../package.json' assert {type: 'json'}
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
 import  { generateInit } from './utils/generateInit.js'
 import { getConfig } from './utils/getConfig.js'
-import {parseTokens} from './utils/parseTokens.js'
-import {generateTemplate} from './utils/generateTemplate.js'
+import {parseString} from './utils/parseString/parseString.js'
+import {parseTokens} from './utils/parseTokens/parseTokens.js'
+import {generateTemplate} from './utils/generateTemplate/generateTemplate.js'
 
 const { version, description } = pkg
 const program = new Command()
@@ -31,9 +32,10 @@ program
 
 program
 	.argument('[emmet]')
-	.action((emmet) => {
+	.action((input) => {
 		const settings = getConfig()
-		const emmetTokens = parseEmmet(emmet, settings)
+		const emmetStrings = parseString(input)
+		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
 		generateTemplate(rootTemplate, settings)
 	})
