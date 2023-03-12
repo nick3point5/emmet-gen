@@ -16,7 +16,7 @@ program
 
 program
 	.command('init')
-	.description(description)
+	.description('Generate the initial files for em-gen')
 	.argument('[type]')
 	.action((type) => {
 		generateInit(type)
@@ -26,7 +26,7 @@ program
 program
 	.command('config')
 	.action(() => {
-		getConfig()
+		console.log(getConfig())
 	})
 
 
