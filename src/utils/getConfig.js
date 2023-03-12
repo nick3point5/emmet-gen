@@ -2,12 +2,12 @@ import fs from 'fs'
 import path from 'path'
 
 export function getConfig() {
-	let configsLocation = `${process.cwd()}\\em-gen-templates.json`
+	let configsLocation = `${process.cwd()}/em-gen-templates.json`
 	let previous = null
 
 	while(!fs.existsSync(configsLocation)) {
 		previous = configsLocation
-		configsLocation = path.resolve(`${configsLocation}\\..\\..\\em-gen-templates.json`)
+		configsLocation = path.resolve(`${configsLocation}/../../em-gen-templates.json`)
 
 		if (previous === configsLocation) {
 			console.error("no em-gen-templates.json found")

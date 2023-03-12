@@ -33,7 +33,7 @@ function createTemplate(source, destination, template) {
 
 	for (let i = 0; i < items.length; i++) {
 		const item = items[i]
-		const itemStat = fs.statSync(`${source}\\${item}`)
+		const itemStat = fs.statSync(`${source}/${item}`)
 
 		if (itemStat.isFile()) {
 			files.push(item);
@@ -43,8 +43,8 @@ function createTemplate(source, destination, template) {
 	}
 
 	for (let i = 0; i < directories.length; i++) {
-		const srcDir = `${source}\\${directories[i]}`
-		let destDir = `${destination}\\${directories[i]}`
+		const srcDir = `${source}/${directories[i]}`
+		let destDir = `${destination}/${directories[i]}`
 			.replace(/__TemplateName__/g, template.name)
 
 		fs.mkdirSync(destDir, { recursive: true})
@@ -53,8 +53,8 @@ function createTemplate(source, destination, template) {
 	}
 
 	for (let i = 0; i < files.length; i++) {
-		const srcFile = `${source}\\${files[i]}`
-		const destFile = `${destination}\\${files[i]}`
+		const srcFile = `${source}/${files[i]}`
+		const destFile = `${destination}/${files[i]}`
 			.replace(/__TemplateName__/g, template.name)
 
 		let fileContent = fs.readFileSync(srcFile,"utf8")

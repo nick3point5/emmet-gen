@@ -255,7 +255,7 @@ export class Template {
 			process.exit(1)
 		}
 
-		const templateSrc = `${templatePath}\\${type}`
+		const templateSrc = `${templatePath}/${type}`
 		const srcDir = fs.readdirSync(templateSrc)
 
 		for (let i = 0; i < srcDir.length; i++) {
