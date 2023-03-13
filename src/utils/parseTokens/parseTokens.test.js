@@ -250,5 +250,28 @@ describe('should parse tokens', () => {
 
 		expect(root).toStrictEqual(hello)
 	})
+	test('empty should not apply to children', () => {
+		const string = '/hello>world'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken, settings)
+
+		const world = new Template({
+			name:'world', 
+			location: `${settings.baseUrl}/hello`, 
+			type:"default", 
+			settings
+		})
+
+		const hello = new Template({
+			name:'hello', 
+			location: settings.baseUrl, 
+			type:"empty", 
+			child:world, 
+			settings
+		})
+
+		expect(root).toStrictEqual(hello)
+	})
 
 })

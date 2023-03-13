@@ -7,7 +7,7 @@ export function generateTemplate(root) {
 
 	while (queue.length > 0) {
 		const template = queue.shift()
-		const {templateSrc, location, name, child, nextSibling} = template
+		const {templateSrc, location, child, nextSibling} = template
 
 		if(child) {
 			nextLevel.push(child)

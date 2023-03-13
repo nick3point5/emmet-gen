@@ -77,7 +77,9 @@ export function parseTokens(
 			if(token.type === 'child') {
 				parentStack.push(previousTemplate)
 				parentTypeStack.push(parentType)
-				parentType = previousTemplate.type
+				if(previousTemplate.type !== 'empty') {
+					parentType = previousTemplate.type
+				}
 				layer++
 			}
 			if(token.type === 'up') {
