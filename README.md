@@ -18,22 +18,30 @@ An un-opinionated file template CLI system that works with syntax inspired by [e
 
 ## Commands
 * Here are the following syntax supported by emmet-gen
-  * (Child: >) makes the following tag a child
+  * Child: > 
+  makes the following tag a child
   ```npx emmet-gen hello>world```
-  * Sibling: + add the following tag as a sibling
-  ```npx emmet-gen hello>world```
-  * Climb-up: ^ directs the following tag up the tree
+  * Sibling: + 
+  add the following tag as a sibling
+  ```npx emmet-gen hello+world```
+  * Climb-up: ^ 
+  directs the following tag up the tree
   ```npx emmet-gen hello>to+the^world```
   * Item numbering: \$
-  * Multiplication: * multiplies a tag NOTE: top item multiplied must have \$ numbering</b>
+  * Multiplication: * 
+  multiplies a tag <b>NOTE: top item multiplied must have \$ numbering</b>
   ```npx emmet-gen hello>world$*5```
-  * ID: # sets the template of the preceding tag
+  * ID: # 
+  sets the template of the preceding tag
   ```npx emmet-gen hello#file>world```
-  * CLASS: . sets the template of the preceding tag and its children.
+  * CLASS: . 
+  sets the template of the preceding tag and its children.
   ```npx` emmet-gen hello.file>world```
-  * Custom Replace: [target="substitute"] replaces target text within a file with the substitute text NOTE: substitute must be wrapped in double quotes</b>
-  ```npx emmet-gen hello>world[ word="replace"]```
-  * empty: / mark the following tag as an empty directory. If following a tag will make the directory a child.
+  * Custom Replace: [target="substitute"] 
+  replaces target text within a file with the substitute text NOTE: substitute must be wrapped in double quotes</b>
+  ```npx emmet-gen hello.file>world[log="error"]```
+  * empty: / 
+  mark the following tag as an empty directory. If following a tag will make the directory a child.
   ```npx emmet-gen /hello/world```
   * Grouping: ()  wraps tags. Can be used with multiply.
    ```npx emmet-gen hello>(to+the+world$)*5```
