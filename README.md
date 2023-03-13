@@ -6,7 +6,7 @@ An un-opinionated file template CLI system that works with syntax inspired by [e
 
 # Getting started
 ## Installation
-* Before emmet-gen can be used it should be initialized with the command ```npx emmet-gen init`emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for emmet-gen-template.json.
+* Before emmet-gen can be used it should be initialized with the command <code>npx emmet-gen init</code>emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for emmet-gen-template.json.
 
 # Usage
 ## Templates
@@ -19,31 +19,31 @@ An un-opinionated file template CLI system that works with syntax inspired by [e
 ## Commands
 * Here are the following syntax supported by emmet-gen
   * Child: > 
-  makes the following tag a child
-  ```npx emmet-gen hello>world```
+  makes the following tag a child 
+  <code>npx emmet-gen hello>world</code>
   * Sibling: + 
   add the following tag as a sibling
-  ```npx emmet-gen hello+world```
+  <code>npx emmet-gen hello+world</code>
   * Climb-up: ^ 
   directs the following tag up the tree
-  ```npx emmet-gen hello>to+the^world```
+  <code>npx emmet-gen hello>to+the^world</code>
   * Item numbering: \$
   * Multiplication: * 
   multiplies a tag <b>NOTE: top item multiplied must have \$ numbering</b>
-  ```npx emmet-gen hello>world$*5```
+  <code>npx emmet-gen hello>world$*5</code>
   * ID: # 
   sets the template of the preceding tag
-  ```npx emmet-gen hello#file>world```
+  <code>npx emmet-gen hello#file>world</code>
   * CLASS: . 
   sets the template of the preceding tag and its children.
-  ```npx` emmet-gen hello.file>world```
+  <code>npx` emmet-gen hello.file>world</code>
   * Custom Replace: [target="substitute"] 
   replaces target text within a file with the substitute text NOTE: substitute must be wrapped in double quotes</b>
-  ```npx emmet-gen hello.file>world[log="error"]```
+  <code>npx emmet-gen hello.file>world[log="error"]</code>
   * empty: / 
   mark the following tag as an empty directory. If following a tag will make the directory a child.
-  ```npx emmet-gen /hello/world```
+  <code>npx emmet-gen /hello/world</code>
   * Grouping: ()  wraps tags. Can be used with multiply.
-   ```npx emmet-gen hello>(to+the+world$)*5```
+  <code>npx emmet-gen hello>(to+the+world$)*5</code>
 <br/>
 * emmet commands will by default create templates in the terminal's working directory. This can be changed in the emmet-gen-template.json and the default directory will be absolutely bound to the directory which contains the emmet-gen-template.json.
