@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from 'commander'
 import pkg from '../package.json' assert {type: 'json'}
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
