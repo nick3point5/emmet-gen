@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-json-modules
+#!/usr/bin/env node --trace-warnings
 import { Command } from 'commander'
 import pkg from '../package.json' assert {type: 'json'}
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
@@ -31,6 +31,11 @@ program
 		console.log(getConfig())
 	})
 
+program
+	.command('params')
+	.action(() => {
+		console.log(process.argv)
+	})
 
 program
 	.argument('[emmet]')

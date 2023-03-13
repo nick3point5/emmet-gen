@@ -53,7 +53,7 @@ npx emmet-gen hello.file
   * Custom Replace: [target="substitute"] 
   replaces target text within a file with the substitute text <b>NOTE: substitute must be wrapped in double quotes</b>
 ```shell
-npx emmet-gen hello.file>world[log="error"]
+npx emmet-gen hello[log="error"]
 ```
   * empty: / 
   mark the following tag as an empty directory. If following a tag will make the directory a child.
@@ -62,7 +62,7 @@ npx emmet-gen /hello/world
 ```
   * Grouping: ()  wraps tags. Can be used with multiply.
 ```shell
-npx emmet-gen hello>(to+the+world$)*5
+npx emmet-gen hello>(to$+the$+world$)*5
 ```
 <br/>
-* emmet commands will by default create templates in the terminal's working directory. This can be changed in the emmet-gen-template.json and the default directory will be absolutely bound to the directory which contains the emmet-gen-template.json.
+* emmet commands will by default create templates in the terminal's working directory. This can be changed in the emmet-gen-template.json and the default directory will be absolutely bound to the directory which contains the emmet-gen-template.json
