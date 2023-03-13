@@ -21,6 +21,7 @@ npx emmet-gen init
 * Each template must contain exactly 1 directory or file at the top. The top directory can have any amount of files and subdirectories.
 
 ## Commands
+### Emmet
 * Emmet-gen with parse a string argument with emmet like syntax.
 * It should be noted depending on your terminal shell you will have to escape some special characters.
 * Here are the following syntax supported by emmet-gen using bash
@@ -54,7 +55,7 @@ ID: #
 npx emmet-gen hello#file\>world
 ```
 CLASS: . 
-  sets the template of the preceding tag and its children.
+  sets the template inheritance of the preceding tag and its children.
 ```shell
 npx emmet-gen hello.file
 ```
@@ -65,7 +66,7 @@ Custom Replace: [target="substitute"]
 npx npx emmet-gen hello.file[log=\"error\"]
 ```
 empty: / 
-  mark the following tag as an empty directory. If following a tag will make the directory a child.
+  mark the following tag as an empty directory. If chained a tag will make the directory a child. Empty tags will not influence the template inheritance.
 ```shell
 npx emmet-gen /hello/world
 ```
@@ -77,4 +78,20 @@ npx emmet-gen hello\>\(to\$+the\$+world\$\)\*5
 <br/>
 
 * emmet commands will by default create templates relative terminal's working directory. 
-* This can be changed in the emmet-gen-template.json by ```"relative": true,``` and the default directory will be absolutely bound to the directory which contains the emmet-gen-template.json
+* This can be changed in the emmet-gen-template.json by ```"relative": false,``` and the default directory will be absolutely bound to the directory which contains the emmet-gen-template.json
+
+### index
+* emmet-gen also can be used to generate index files using es6 importing syntax for JavaScript/Typescript files.
+* If a path isn't specified, emmet-gen will use the current working directory. 
+```shell
+npx emmet-gen index ./hello
+```
+* The --recursive or -r flag can be used to recursively generate index files.
+```shell
+npx emmet-gen index ./hello -r
+```
+* For emmet commands, the --index or -i flag can be used to recursively generate index files for templates.
+```shell
+npx emmet-gen hello\>\(to\$+the\$+world\$\)\*5 -i
+```
+* Index files with be generated without the flag by changed in the emmet-gen-template.json by ```"auto_imports": true,```.

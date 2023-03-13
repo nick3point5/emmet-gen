@@ -1,5 +1,5 @@
 {
-	"barrel_imports": false,
+	"auto_imports": false,
 	"relative": true,
 	"templatesSource": "./emmet-gen-templates",
 	"baseUrl": "./"
