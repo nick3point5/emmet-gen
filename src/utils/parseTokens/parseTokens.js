@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import { getReplacementMap } from '../getReplacementMap.js'
 
 export function parseTokens( 
@@ -207,7 +208,7 @@ export class Template {
 		this.name = name
 		this.type = type
 		this.templateSrc = this.getMatchingTemplate(type, settings)
-		this.location = location
+		this.location = path.resolve(location)
 		this.child = child
 		this.nextSibling = nextSibling
 		this.replacements = null
@@ -255,7 +256,7 @@ export class Template {
 			process.exit(1)
 		}
 
-		const templateSrc = `${templatePath}/${type}`
+		const templateSrc = path.resolve(`${templatePath}/${type}`)
 		const srcDir = fs.readdirSync(templateSrc)
 
 		for (let i = 0; i < srcDir.length; i++) {
@@ -273,7 +274,7 @@ export class Template {
 		const templates = fs.readdirSync(this.templateSrc)
 
 		templates[0] = templates[0].replace(/__TemplateName__/g, this.name)
-		return `${this.location}/${templates[0]}`
+		return path.resolve(`${this.location}/${templates[0]}`)
 	}
 
 	setClass(type, settings) {

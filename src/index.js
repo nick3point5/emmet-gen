@@ -1,12 +1,16 @@
-#!/usr/bin/env node --experimental-json-modules
+#!/usr/bin/env node
+import fs from 'fs'
+import path from 'path'
 import { Command } from 'commander'
-import pkg from '../package.json' assert {type: 'json'}
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
 import { generateInit } from './utils/generateInit.js'
 import { getConfig } from './utils/getConfig.js'
 import { parseString } from './utils/parseString/parseString.js'
 import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
+
+const pkgLocation = path.resolve(`./package.json`)
+const pkg = JSON.parse(fs.readFileSync(pkgLocation))
 
 const { version, description } = pkg
 const program = new Command()
@@ -31,6 +35,15 @@ program
 		console.log(getConfig())
 	})
 
+program
+	.command('params')
+	.argument('[emmet]')
+	.action((emmet) => {
+		console.log("emmet", emmet)
+		console.log("------")
+		console.log(process.argv)
+		process.exit(1)
+	})
 
 program
 	.argument('[emmet]')
