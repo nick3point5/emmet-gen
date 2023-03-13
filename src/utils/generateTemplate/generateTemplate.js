@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 export function generateTemplate(root) {
 	const queue = [root]
@@ -43,8 +44,8 @@ function createTemplate(source, destination, template) {
 	}
 
 	for (let i = 0; i < directories.length; i++) {
-		const srcDir = `${source}/${directories[i]}`
-		let destDir = `${destination}/${directories[i]}`
+		const srcDir = path.resolve(`${source}/${directories[i]}`)
+		let destDir = path.resolve(`${destination}/${directories[i]}`)
 			.replace(/__TemplateName__/g, template.name)
 
 		fs.mkdirSync(destDir, { recursive: true})
@@ -53,8 +54,8 @@ function createTemplate(source, destination, template) {
 	}
 
 	for (let i = 0; i < files.length; i++) {
-		const srcFile = `${source}/${files[i]}`
-		const destFile = `${destination}/${files[i]}`
+		const srcFile = path.resolve(`${source}/${files[i]}`)
+		const destFile = path.resolve(`${destination}/${files[i]}`)
 			.replace(/__TemplateName__/g, template.name)
 
 		let fileContent = fs.readFileSync(srcFile,"utf8")
