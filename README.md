@@ -49,7 +49,7 @@ npx emmet-gen hello\>to+the^world
 ```shell
 npx emmet-gen hello\>world\$\*5
 ```
-#### ID: # 
+#### ID: \# 
   sets the template of the preceding tag
 ```shell
 npx emmet-gen hello#file\>world
