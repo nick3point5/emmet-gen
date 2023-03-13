@@ -1,17 +1,17 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-json-modules
 import { Command } from 'commander'
 import pkg from '../package.json' assert {type: 'json'}
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
-import  { generateInit } from './utils/generateInit.js'
+import { generateInit } from './utils/generateInit.js'
 import { getConfig } from './utils/getConfig.js'
-import {parseString} from './utils/parseString/parseString.js'
-import {parseTokens} from './utils/parseTokens/parseTokens.js'
-import {generateTemplate} from './utils/generateTemplate/generateTemplate.js'
+import { parseString } from './utils/parseString/parseString.js'
+import { parseTokens } from './utils/parseTokens/parseTokens.js'
+import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 
 const { version, description } = pkg
 const program = new Command()
 
-process.on('warning', e => console.warn(e.stack));
+process.on('warning', e => console.warn(e.stack))
 
 program
 	.version(version)
@@ -23,8 +23,7 @@ program
 	.argument('[type]')
 	.action((type) => {
 		generateInit(type)
-		}
-	)
+	})
 
 program
 	.command('config')
