@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs'
 import path from 'path'
+
 import { Command } from 'commander'
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
 import { generateInit } from './utils/generateInit.js'
@@ -10,7 +11,7 @@ import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 import { indexer } from './utils/indexer/indexer.js'
 
-const pkgLocation = path.resolve(`${process.argv[1]}/../../package.json`)
+const pkgLocation = new URL(`../package.json`, import.meta.url)
 const pkg = JSON.parse(fs.readFileSync(pkgLocation))
 
 const { version, description } = pkg
