@@ -1,11 +1,10 @@
 import path from 'path'
-import { copyDirectoryContents } from './copyDirectoryContents.js';
+import { copyDirectoryContents } from './copyDirectoryContents.js'
 import { fileURLToPath } from 'url'
-import fs from 'fs';
+import fs from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
 
 export function generateInit() {
 	const defaultPath = path.resolve(`${__dirname}/../data/init`)
@@ -13,5 +12,7 @@ export function generateInit() {
 
 	copyDirectoryContents(defaultPath, destPath)
 
-	fs.unlinkSync(path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.gitignore`))
+	fs.unlinkSync(
+		path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.gitignore`),
+	)
 }

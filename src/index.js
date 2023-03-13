@@ -11,17 +11,15 @@ import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 import { indexer } from './utils/indexer/indexer.js'
 
-const pkgLocation = new URL(`../package.json`, import.meta.url)
+const pkgLocation = new URL('../package.json', import.meta.url)
 const pkg = JSON.parse(fs.readFileSync(pkgLocation))
 
 const { version, description } = pkg
 const program = new Command()
 
-process.on('warning', e => console.warn(e.stack))
+process.on('warning', (e) => console.warn(e.stack))
 
-program
-	.version(version)
-	.description(description)
+program.version(version).description(description)
 
 program
 	.command('init')
@@ -31,11 +29,9 @@ program
 		generateInit(type)
 	})
 
-program
-	.command('config')
-	.action(() => {
-		console.log(getConfig())
-	})
+program.command('config').action(() => {
+	console.log(getConfig())
+})
 
 program
 	.command('index')
@@ -43,7 +39,7 @@ program
 	.argument('[location]')
 	.option('-r, --recursive', 'recursively generate index files')
 	.action((location,option) => {
-		const [settings, settingsLocation] = getConfig()
+		const {settings, settingsLocation} = getConfig()
 		if(settings.relative) {
 			location = path.resolve(process.cwd(),settings.baseUrl,location)
 		} else {
@@ -56,7 +52,7 @@ program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
 	.action((input,option) => {
-		const [settings, settingsLocation] = getConfig()
+		const {settings} = getConfig()
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
@@ -67,4 +63,4 @@ program
 		}
 	})
 
-program.parse();
+program.parse()

@@ -1,13 +1,13 @@
 export function getReplacementMap(string) {
 	const replaceMap = new Map()
 
-	string = string.replaceAll('&nbsp'," ")
+	string = string.replaceAll('&nbsp', ' ')
 	const keys = string.match(/\w+(?==)/g)
-	string = string.replace(/\w+=/g,"")
-	const values = string.match(/(?<=\").*?(?=\")/g)
+	string = string.replace(/\w+=/g, '')
+	const values = string.match(/(?<=").*?(?=")/g)
 
-	if(keys.length !== values.length) {
-		console.log("The attr property is not properly formatted.")
+	if (keys.length !== values.length) {
+		console.log('The attr property is not properly formatted.')
 
 		process.exit(1)
 	}

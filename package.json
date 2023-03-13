@@ -1,6 +1,6 @@
 {
   "name": "emmet-gen",
-  "version": "0.6.7",
+  "version": "0.7.3",
   "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
@@ -9,7 +9,10 @@
     "prepare": "husky install",
     "start": "node ./src/index.js",
     "test:gh": "node ./src/index.js init && vitest",
-    "test": "vitest"
+    "test": "vitest",
+    "prettier": "npx prettier --write ./src",
+    "lint:fix": "eslint --ext .js --ignore-path .gitignore .  --fix",
+    "lint": "eslint --ext .js --ignore-path .gitignore ."
   },
   "keywords": [
     "generate",
@@ -29,6 +32,9 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^8.35.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.25.2",
     "husky": "^8.0.3",
     "vitest": "^0.29.2"
   },

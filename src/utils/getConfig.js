@@ -10,7 +10,7 @@ export function getConfig() {
 		configLocation = path.resolve(`${configLocation}/../../emmet-gen-templates.json`)
 
 		if (previous === configLocation) {
-			console.error("no emmet-gen-templates.json found")
+			console.error('no emmet-gen-templates.json found')
 			process.exit(1)
 		}
 	}
@@ -24,7 +24,7 @@ export function getConfig() {
 		process.exit(1)
 	}
 
-	if(config.relative) {
+	if (config.relative) {
 		config.baseUrl = path.resolve(process.cwd(), config.baseUrl)
 	}else {
 		config.baseUrl = path.resolve(configLocation, '..', config.baseUrl)
@@ -32,5 +32,5 @@ export function getConfig() {
 
 	config.templatesSource = templatesSrc
 
-	return [config, configLocation]
+	return {settings: config, settingsLocation: configLocation}
 }

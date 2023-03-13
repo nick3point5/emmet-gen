@@ -2,7 +2,7 @@ export function parseEmmet(emmetStrings) {
 	const emmetTokens = []
 
 	for (let i = 0; i < emmetStrings.length; i++) {
-		const tokenString = emmetStrings[i];
+		const tokenString = emmetStrings[i]
 
 		emmetTokens.push(new EmmetToken(tokenString))
 	}
@@ -20,72 +20,70 @@ export class EmmetToken {
 			case '.':
 				type = 'class'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '#':
 				type = 'id'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '+':
 				type = 'sibling'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '>':
 				type = 'child'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '^':
 				type = 'up'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '\\':
 				type = 'empty'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '/':
 				type = 'empty'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '*':
 				type = 'multiply'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '@':
 				type = 'multiplyStart'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '(':
 				type = 'openGroup'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case ')':
 				type = 'closeGroup'
 				value = tokenString.substring(1)
-				break;
+				break
 
 			case '[':
 				type = 'attr'
-				value = tokenString.substring(1, tokenString.length-1)
-				break;
+				value = tokenString.substring(1, tokenString.length - 1)
+				break
 
-		
 			default:
 				type = 'name'
 				value = tokenString
-				break;
+				break
 		}
 
 		this.type = type
 		this.value = value
 	}
 }
-
