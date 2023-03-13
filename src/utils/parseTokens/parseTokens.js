@@ -133,7 +133,7 @@ export function parseTokens(
 
 					for (let i = multiplyStart - 1; i < n; i++) {
 						groupTemplate = parseTokens(captureTokens, settings, groupSrc, 1, i + 1)
-						linkGroup(root, groupLink, groupTemplate)
+						root = linkGroup(root, groupLink, groupTemplate)
 						groupLink.template = groupTemplate
 						groupLink.type = 'sibling'
 						previousTemplate = groupTemplate
@@ -318,4 +318,6 @@ function linkGroup(root, groupLink, groupTemplate) {
 	if (groupLink.type === null) {
 		root = groupTemplate
 	}
+
+	return root
 }
