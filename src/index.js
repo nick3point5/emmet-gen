@@ -37,7 +37,7 @@ program
 
 program
 	.command('params')
-	.command('[emmet]')
+	.argument('[emmet]')
 	.action((emmet) => {
 		console.log("emmet", emmet)
 		console.log("------")
