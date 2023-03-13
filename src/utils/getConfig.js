@@ -2,22 +2,22 @@ import fs from 'fs'
 import path from 'path'
 
 export function getConfig() {
-	let configsLocation = `${process.cwd()}/emmet-gen-templates.json`
+	let configLocation = `${process.cwd()}/emmet-gen-templates.json`
 	let previous = null
 
-	while(!fs.existsSync(configsLocation)) {
-		previous = configsLocation
-		configsLocation = path.resolve(`${configsLocation}/../../emmet-gen-templates.json`)
+	while(!fs.existsSync(configLocation)) {
+		previous = configLocation
+		configLocation = path.resolve(`${configLocation}/../../emmet-gen-templates.json`)
 
-		if (previous === configsLocation) {
+		if (previous === configLocation) {
 			console.error("no emmet-gen-templates.json found")
 			process.exit(1)
 		}
 	}
 
-	const config = JSON.parse(fs.readFileSync(configsLocation))
+	const config = JSON.parse(fs.readFileSync(configLocation))
 
-	const templatesSrc = path.resolve(configsLocation, '..',config.templatesSource)
+	const templatesSrc = path.resolve(configLocation, '..',config.templatesSource)
 
 	if (!fs.existsSync(templatesSrc)) {
 		console.error(`no emmet-gen-templates found at ${templatesSrc}`)
@@ -27,10 +27,10 @@ export function getConfig() {
 	if(config.relative) {
 		config.baseUrl = path.resolve(process.cwd(), config.baseUrl)
 	}else {
-		config.baseUrl = path.resolve(configsLocation, '..', config.baseUrl)
+		config.baseUrl = path.resolve(configLocation, '..', config.baseUrl)
 	}
 
 	config.templatesSource = templatesSrc
 
-	return config
+	return [config, configLocation]
 }
