@@ -42,11 +42,11 @@ program
 	.argument('[location]')
 	.option('-r, --recursive', 'recursively generate index files')
 	.action((location,option) => {
-		const settings = getConfig()
+		const [settings, settingsLocation] = getConfig()
 		if(settings.relative) {
 			location = path.resolve(process.cwd(),settings.baseUrl,location)
-		}else {
-			location = path.resolve(pkgLocation,settings.baseUrl,location)
+		} else {
+			location = path.resolve(settingsLocation,settings.baseUrl,location)
 		}
 		indexer(location, !!option.recursive)
 	})
@@ -55,7 +55,7 @@ program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
 	.action((input,option) => {
-		const settings = getConfig()
+		const [settings, settingsLocation] = getConfig()
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
