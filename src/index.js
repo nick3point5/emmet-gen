@@ -44,9 +44,9 @@ program
 	.action((location,option) => {
 		const settings = getConfig()
 		if(settings.relative) {
-			location = path.resolve(`${process.cwd()}/${settings.baseUrl}/${location}`)
+			location = path.resolve(process.cwd(),settings.baseUrl,location)
 		}else {
-			location = path.resolve(`${pkgLocation}/${settings.baseUrl}/${location}`)
+			location = path.resolve(pkgLocation,settings.baseUrl,location)
 		}
 		indexer(location, !!option.recursive)
 	})
