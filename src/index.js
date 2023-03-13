@@ -63,7 +63,7 @@ program
 		generateTemplate(rootTemplate, settings)
 
 		if(!!option.index || settings.auto_imports) {
-			indexer(rootTemplate.getChildLocation(), !!option.index)
+			indexer(rootTemplate.getChildLocation(), true)
 		}
 	})
 
