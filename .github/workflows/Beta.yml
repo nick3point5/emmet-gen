@@ -27,6 +27,6 @@ jobs:
     # - name: Build
     #   run: npm run build      
     - name: Publish package on NPM 📦
-      run: npm adduser && npm publish emmet-gen
+      run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
