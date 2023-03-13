@@ -7,19 +7,19 @@ export function generateTemplate(root) {
 
 	while (queue.length > 0) {
 		const template = queue.shift()
-		const {templateSrc, location, child, nextSibling} = template
+		const { templateSrc, location, child, nextSibling } = template
 
-		if(child) {
+		if (child) {
 			nextLevel.push(child)
 		}
 
 		createTemplate(templateSrc, location, template)
 
-		if(nextSibling) {
+		if (nextSibling) {
 			queue.push(nextSibling)
 		}
 
-		if(queue.length === 0) {
+		if (queue.length === 0) {
 			queue.push(...nextLevel)
 			nextLevel = []
 		}
@@ -37,30 +37,32 @@ function createTemplate(source, destination, template) {
 		const itemStat = fs.statSync(`${source}/${item}`)
 
 		if (itemStat.isFile()) {
-			files.push(item);
+			files.push(item)
 		} else if (itemStat.isDirectory()) {
-			directories.push(item);
+			directories.push(item)
 		}
 	}
 
 	for (let i = 0; i < directories.length; i++) {
 		const srcDir = path.resolve(`${source}/${directories[i]}`)
-		let destDir = path.resolve(`${destination}/${directories[i]}`)
+		let destDir = path
+			.resolve(`${destination}/${directories[i]}`)
 			.replace(/__TemplateName__/g, template.name)
 
-		fs.mkdirSync(destDir, { recursive: true})
+		fs.mkdirSync(destDir, { recursive: true })
 
 		createTemplate(srcDir, destDir, template)
 	}
 
 	for (let i = 0; i < files.length; i++) {
 		const srcFile = path.resolve(`${source}/${files[i]}`)
-		const destFile = path.resolve(`${destination}/${files[i]}`)
+		const destFile = path
+			.resolve(`${destination}/${files[i]}`)
 			.replace(/__TemplateName__/g, template.name)
 
-		let fileContent = fs.readFileSync(srcFile,"utf8")
+		let fileContent = fs.readFileSync(srcFile, 'utf8')
 
-		template.replacements?.forEach((value, key)=> {
+		template.replacements?.forEach((value, key) => {
 			fileContent = fileContent.replaceAll(key, value)
 		})
 

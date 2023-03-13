@@ -11,16 +11,16 @@ export function copyDirectoryContents(source, destination) {
 		const itemStat = fs.statSync(`${source}/${item}`)
 
 		if (itemStat.isFile()) {
-			files.push(item);
+			files.push(item)
 		} else if (itemStat.isDirectory()) {
-			directories.push(item);
+			directories.push(item)
 		}
 	}
 
 	for (let i = 0; i < directories.length; i++) {
-		const srcDir = `${source}/${directories[i]}`;
-		const destDir = `${destination}/${directories[i]}`;
-		fs.mkdirSync(destDir, { recursive: true})
+		const srcDir = `${source}/${directories[i]}`
+		const destDir = `${destination}/${directories[i]}`
+		fs.mkdirSync(destDir, { recursive: true })
 		copyDirectoryContents(srcDir, destDir)
 	}
 

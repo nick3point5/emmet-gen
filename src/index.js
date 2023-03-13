@@ -16,11 +16,9 @@ const pkg = JSON.parse(fs.readFileSync(pkgLocation))
 const { version, description } = pkg
 const program = new Command()
 
-process.on('warning', e => console.warn(e.stack))
+process.on('warning', (e) => console.warn(e.stack))
 
-program
-	.version(version)
-	.description(description)
+program.version(version).description(description)
 
 program
 	.command('init')
@@ -30,22 +28,20 @@ program
 		generateInit(type)
 	})
 
-program
-	.command('config')
-	.action(() => {
-		console.log(getConfig())
-	})
+program.command('config').action(() => {
+	console.log(getConfig())
+})
 
 program
 	.command('index')
 	.description('Generate index files using es6 named importing')
 	.argument('[location]')
 	.option('-r, --recursive', 'recursively generate index files')
-	.action((location,option) => {
+	.action((location, option) => {
 		const settings = getConfig()
-		if(settings.relative) {
+		if (settings.relative) {
 			location = path.resolve(`${process.cwd()}/${settings.baseUrl}/${location}`)
-		}else {
+		} else {
 			location = path.resolve(`${pkgLocation}/${settings.baseUrl}/${location}`)
 		}
 		indexer(location, !!option.recursive)
@@ -54,16 +50,16 @@ program
 program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
-	.action((input,option) => {
+	.action((input, option) => {
 		const settings = getConfig()
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
 		generateTemplate(rootTemplate, settings)
 
-		if(!!option.index || settings.auto_imports) {
+		if (!!option.index || settings.auto_imports) {
 			indexer(rootTemplate.getChildLocation(), !!option.index)
 		}
 	})
 
-program.parse();
+program.parse()

@@ -14,9 +14,7 @@ export function indexer(source, recursive = false, isTypeScript = false) {
 	let text = ''
 	let items = fs.readdirSync(source)
 
-	items = items
-		.sort(collator.compare)
-		.filter((name) => !isIndex.test(name))
+	items = items.sort(collator.compare).filter((name) => !isIndex.test(name))
 
 	const files = []
 	const directories = []
@@ -26,9 +24,9 @@ export function indexer(source, recursive = false, isTypeScript = false) {
 		const itemStat = fs.statSync(`${source}/${item}`)
 
 		if (itemStat.isFile()) {
-			files.push(item);
+			files.push(item)
 		} else if (itemStat.isDirectory()) {
-			directories.push(item);
+			directories.push(item)
 		}
 	}
 
@@ -38,17 +36,16 @@ export function indexer(source, recursive = false, isTypeScript = false) {
 			const nameNoExtension = filename.replace(regexExtensions, '')
 			text += `export { ${nameNoExtension} } from './${nameNoExtension}'\n`
 
-			if ((/(\.tsx|\.ts)$/m).test(filename)) {
+			if (/(\.tsx|\.ts)$/m.test(filename)) {
 				isTypeScript = true
 			}
 		}
-
 	}
 
 	if (files.length > 0) {
-		text += `\n`
+		text += '\n'
 	}
-	
+
 	for (let i = 0; i < directories.length; i++) {
 		const directory = directories[i]
 
@@ -65,7 +62,7 @@ export function indexer(source, recursive = false, isTypeScript = false) {
 	let indexName = `${source}/index.js`
 
 	if (isTypeScript) {
-		indexName = (`${source}/index.ts`)
+		indexName = `${source}/index.ts`
 	}
 
 	fs.writeFileSync(indexName, text)

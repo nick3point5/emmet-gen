@@ -1,1 +1,1 @@
-console.log("__TemplateName__")
+console.log('__TemplateName__')
