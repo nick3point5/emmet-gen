@@ -17,7 +17,7 @@ npx emmet-gen init
 * Emmet-gen will use the templates in the emmet-gen-template directory.
 * Every directory at the top of `emmet-gen-template` is a template route.
 * The name of the template will be the name used as a class or id.
-* Any name or text within a file with `__TemplateName_`_` will be replaced by the tag of the template.
+* Any name or text within a file with `__TemplateName__` will be replaced by the tag of the template.
 * Each template must contain exactly 1 directory or file at the top. The top directory can have any amount of files and subdirectories.
 
 ## Commands
