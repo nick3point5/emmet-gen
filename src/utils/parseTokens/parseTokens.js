@@ -2,13 +2,13 @@ import fs from 'fs'
 import path from 'path'
 import { getReplacementMap } from '../getReplacementMap.js'
 
-export function parseTokens( 
-	emmetTokens, 
-	settings, 
-	rootSrc=null, 
-	groupCountLength = null, 
-	groupCount = null	
-	) {
+export function parseTokens(
+	emmetTokens,
+	settings,
+	rootSrc = null,
+	groupCountLength = null,
+	groupCount = null,
+) {
 	let location = rootSrc || settings.baseUrl
 	let previousTemplate = null
 	let previousOperation = null
@@ -24,85 +24,92 @@ export function parseTokens(
 	const groupLinks = []
 	let groupLink = {
 		template: null,
-		type: null
+		type: null,
 	}
 
 	for (let i = 0; i < emmetTokens.length; i++) {
 		const token = emmetTokens[i]
 
-		if(groupTokens.length > 0) {
+		if (groupTokens.length > 0) {
 			groupTokens.push(token)
 		}
 
-		if(token.type === 'name') {
-			if(operation === 'class') {
+		if (token.type === 'name') {
+			if (operation === 'class') {
 				previousTemplate.setClass(token.value, settings)
 				operation = null
 				continue
 			}
 
-			if(operation === 'id') {
+			if (operation === 'id') {
 				previousTemplate.setId(token.value, settings)
 				operation = null
 				continue
 			}
 
-			if(groupCountLength) {
+			if (groupCountLength) {
 				const match = token.value.match(/\$+/g)
-				if(match) {
+				if (match) {
 					groupCountLength = match[0].length
 				}
 			}
 
 			const type = parentType
-			const name = (!groupCount) 
-				? token.value 
+			const name = !groupCount
+				? token.value
 				: replaceCountMarker(token.value, groupCount, groupCountLength)
 
-			let template = new Template({name, location, operation, previous: previousTemplate, type, settings})
+			let template = new Template({
+				name,
+				location,
+				operation,
+				previous: previousTemplate,
+				type,
+				settings,
+			})
 
 			operation = null
 			location = template.location
 
-			if(!root) {
+			if (!root) {
 				root = template
 			}
 
 			previousTemplate = template
 		} else {
 			operation = token.type
-			if(token.type === 'sibling') {
+			if (token.type === 'sibling') {
 				location = previousTemplate.location
 			}
-			if(token.type === 'child') {
+			if (token.type === 'child') {
 				parentStack.push(previousTemplate)
 				parentTypeStack.push(parentType)
-				if(previousTemplate.type !== 'empty') {
+				if (previousTemplate.type !== 'empty') {
 					parentType = previousTemplate.type
 				}
 				layer++
 			}
-			if(token.type === 'up') {
+			if (token.type === 'up') {
 				previousTemplate = parentStack.pop()
 				parentType = parentTypeStack.pop()
 				location = previousTemplate.location
 				layer--
 			}
-			if(previousOperation === 'empty') {
+			if (previousOperation === 'empty') {
 				parentStack.push(previousTemplate)
 				parentTypeStack.push(parentType)
 				location = previousTemplate.getChildLocation()
 				layer++
 			}
-			if(token.type === 'multiply') {
+			if (token.type === 'multiply') {
 				const match = previousTemplate.name.match(/\$+/g)
-				if(!match) {
+				if (!match) {
 					console.error('root template must have "$" in name')
 				}
 
 				const countLength = match[0].length
 
-				if(previousOperation === 'closeGroup') {
+				if (previousOperation === 'closeGroup') {
 					groupTokens.pop()
 					groupTokens.pop()
 					const captureTokens = []
@@ -118,95 +125,92 @@ export function parseTokens(
 
 					let groupTemplate
 
-					function linkGroup(groupLink, groupTemplate) {
-						if(groupLink.type === 'sibling') {
-							let next = groupLink.template
-							while(next.nextSibling) {
-								next = next.nextSibling
-							}
-							next.nextSibling = groupTemplate
-						}
-						if(groupLink.type === 'child') {
-							groupLink.template.child = groupTemplate
-						}
-						if(groupLink.type === null) {
-							root = groupTemplate
-						}
-					}
-
 					let groupSrc = groupLink.template?.location || location
 
-					if(groupLink.type === 'child') {
+					if (groupLink.type === 'child') {
 						groupSrc = groupLink.template.getChildLocation()
 					}
 
-					for (let i = multiplyStart-1; i < n; i++) {
-						groupTemplate = parseTokens(captureTokens, settings, groupSrc, 1, i+1)
-						linkGroup(groupLink, groupTemplate)
+					for (let i = multiplyStart - 1; i < n; i++) {
+						groupTemplate = parseTokens(captureTokens, settings, groupSrc, 1, i + 1)
+						root = linkGroup(root, groupLink, groupTemplate)
 						groupLink.template = groupTemplate
 						groupLink.type = 'sibling'
 						previousTemplate = groupTemplate
 					}
-
-				}else {
+				} else {
 					let replacementMap = null
-					if(previousOperation === 'attr') {
+					if (previousOperation === 'attr') {
 						replacementMap = previousTemplate.replacements
 					}
 					const countName = previousTemplate.name
 
 					previousTemplate.name = replaceCountMarker(countName, multiplyStart, countLength)
-					
+
 					const n = Number(token.value)
 					for (let i = multiplyStart; i < n; i++) {
-						const name = replaceCountMarker(countName, i+1, countLength)
-	
-						let template = new Template({name, location, operation:'sibling', previous: previousTemplate, type: previousTemplate.type, settings})
+						const name = replaceCountMarker(countName, i + 1, countLength)
+
+						let template = new Template({
+							name,
+							location,
+							operation: 'sibling',
+							previous: previousTemplate,
+							type: previousTemplate.type,
+							settings,
+						})
 
 						template.replacements = replacementMap
-	
+
 						previousTemplate = template
 					}
 				}
 
 				multiplyStart = 1
 			}
-			if(token.type === 'multiplyStart') {
+			if (token.type === 'multiplyStart') {
 				multiplyStart = Number(token.value)
 			}
-			if(token.type === 'openGroup') {
+			if (token.type === 'openGroup') {
 				groupLayer.push(layer)
 				groupTokens.push(token)
 				groupLink = {
 					template: previousTemplate,
-					type: previousOperation
+					type: previousOperation,
 				}
 				groupLinks.push(groupLink)
-
 			}
-			if(token.type === 'closeGroup') {
+			if (token.type === 'closeGroup') {
 				const openLayer = groupLayer.pop(layer)
-				while(openLayer !== layer) {
+				while (openLayer !== layer) {
 					previousTemplate = parentStack.pop()
 					parentType = parentTypeStack.pop()
 					layer--
 				}
 				groupLink = groupLinks.pop()
 			}
-			if(token.type === 'attr') {
+			if (token.type === 'attr') {
 				previousTemplate.setReplacements(token.value)
 			}
 
 			previousOperation = token.type
 		}
-
 	}
 
 	return root
 }
 
 export class Template {
-	constructor({name, location, type="default", nextSibling=null, child=null, operation=null, previous=null,settings=null}) {
+	constructor({
+		name,
+		location,
+		type = 'default',
+		nextSibling = null,
+		child = null,
+		operation = null,
+		previous = null,
+		settings = null,
+	}) {
 		this.name = name
 		this.type = type
 		this.templateSrc = this.getMatchingTemplate(type, settings)
@@ -233,10 +237,10 @@ export class Template {
 				previous.nextSibling = this
 				break
 			case 'empty':
-				if(previous && this.location !== previous.location) {
+				if (previous && this.location !== previous.location) {
 					previous.child = this
 					this.location = previous.getChildLocation()
-				} else if(previous) {
+				} else if (previous) {
 					previous.nextSibling = this
 				}
 
@@ -253,7 +257,7 @@ export class Template {
 		const templatePath = settings.templatesSource
 		const templates = fs.readdirSync(templatePath)
 
-		if(!templates.includes(type)) {
+		if (!templates.includes(type)) {
 			console.error(`no template ${type} found in the emmet-gen-templates`)
 			process.exit(1)
 		}
@@ -262,9 +266,11 @@ export class Template {
 		const srcDir = fs.readdirSync(templateSrc)
 
 		for (let i = 0; i < srcDir.length; i++) {
-			const template = srcDir[i];
-			if(!(/__TemplateName__/g).test(template) || srcDir.length > 1) {
-				console.error(`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`)
+			const template = srcDir[i]
+			if (!/__TemplateName__/g.test(template) || srcDir.length > 1) {
+				console.error(
+					`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`,
+				)
 				process.exit(1)
 			}
 		}
@@ -293,7 +299,25 @@ export class Template {
 	}
 }
 
-function replaceCountMarker(name, count,countLength) {
-	let countName = String(count).padStart(countLength,'0')
+function replaceCountMarker(name, count, countLength) {
+	let countName = String(count).padStart(countLength, '0')
 	return name.replace(/\$+/g, countName)
+}
+
+function linkGroup(root, groupLink, groupTemplate) {
+	if (groupLink.type === 'sibling') {
+		let next = groupLink.template
+		while (next.nextSibling) {
+			next = next.nextSibling
+		}
+		next.nextSibling = groupTemplate
+	}
+	if (groupLink.type === 'child') {
+		groupLink.template.child = groupTemplate
+	}
+	if (groupLink.type === null) {
+		root = groupTemplate
+	}
+
+	return root
 }
