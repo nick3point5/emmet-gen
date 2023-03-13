@@ -20,30 +20,49 @@ An un-opinionated file template CLI system that works with syntax inspired by [e
 * Here are the following syntax supported by emmet-gen
   * Child: > 
   makes the following tag a child 
-  <code>npx emmet-gen hello>world</code>
+```shell
+$ npx emmet-gen hello>world
+```
+
   * Sibling: + 
   add the following tag as a sibling
-  <code>npx emmet-gen hello+world</code>
+```shell
+$ npx emmet-gen hello+world
+```
   * Climb-up: ^ 
   directs the following tag up the tree
-  <code>npx emmet-gen hello>to+the^world</code>
+```shell
+$ npx emmet-gen hello>to+the^world
+```
   * Item numbering: \$
   * Multiplication: * 
   multiplies a tag <b>NOTE: top item multiplied must have \$ numbering</b>
-  <code>npx emmet-gen hello>world$*5</code>
+```shell
+$ npx emmet-gen hello>world$*5
+```
   * ID: # 
   sets the template of the preceding tag
-  <code>npx emmet-gen hello#file>world</code>
+```shell
+$ npx emmet-gen hello#file>world
+```
   * CLASS: . 
   sets the template of the preceding tag and its children.
-  <code>npx` emmet-gen hello.file>world</code>
+```shell
+$ npx emmet-gen hello.file
+```
   * Custom Replace: [target="substitute"] 
-  replaces target text within a file with the substitute text NOTE: substitute must be wrapped in double quotes</b>
-  <code>npx emmet-gen hello.file>world[log="error"]</code>
+  replaces target text within a file with the substitute text <b>NOTE: substitute must be wrapped in double quotes</b>
+```shell
+$ npx emmet-gen hello.file>world[log="error"]
+```
   * empty: / 
   mark the following tag as an empty directory. If following a tag will make the directory a child.
-  <code>npx emmet-gen /hello/world</code>
+```shell
+$ npx emmet-gen /hello/world
+```
   * Grouping: ()  wraps tags. Can be used with multiply.
-  <code>npx emmet-gen hello>(to+the+world$)*5</code>
+```shell
+$ npx emmet-gen hello>(to+the+world$)*5
+```
 <br/>
 * emmet commands will by default create templates in the terminal's working directory. This can be changed in the emmet-gen-template.json and the default directory will be absolutely bound to the directory which contains the emmet-gen-template.json.
