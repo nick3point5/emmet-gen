@@ -6,7 +6,7 @@ import { parseEmmet } from "../parseEmmet/parseEmmet.js"
 import { getConfig } from "../getConfig.js"
 
 
-const settings = getConfig()
+const [settings, settingsLocation] = getConfig()
 
 describe('should parse tokens', () => {
 	test('siblings', () => {
