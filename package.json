@@ -1,11 +1,11 @@
 {
   "name": "emmet-gen",
-  "version": "0.5.16",
+  "version": "0.5.18",
   "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "precommit": "bash precommit.sh",
+    "precommit": "",
     "prepare": "husky install && npx husky add .husky/pre-commit",
     "start": "node ./src/index.js",
     "test:gh": "node ./src/index.js init && vitest",

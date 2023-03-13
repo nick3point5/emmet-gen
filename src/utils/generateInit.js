@@ -1,6 +1,7 @@
 import path from 'path'
 import { copyDirectoryContents } from './copyDirectoryContents.js';
 import { fileURLToPath } from 'url'
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -11,4 +12,6 @@ export function generateInit() {
 	const destPath = path.resolve(process.cwd())
 
 	copyDirectoryContents(defaultPath, destPath)
+
+	fs.unlinkSync(path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.gitignore`))
 }
