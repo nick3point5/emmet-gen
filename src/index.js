@@ -9,7 +9,7 @@ import { parseString } from './utils/parseString/parseString.js'
 import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 
-const pkgLocation = path.resolve(`../package.json`)
+const pkgLocation = path.resolve(`./package.json`)
 const pkg = JSON.parse(fs.readFileSync(pkgLocation))
 
 const { version, description } = pkg
