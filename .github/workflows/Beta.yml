@@ -26,11 +26,4 @@ jobs:
     - name: Test
       run: npm run test:gh --if-present
     # - name: Build
-    #   run: npm run build      
-    - name: Publish package on NPM 📦
-      run: npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
+    #   run: npm run build
