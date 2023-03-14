@@ -36,6 +36,16 @@ export function parseTokens(
 
 		if (token.type === 'name') {
 			if (operation === 'class') {
+				if (!previousTemplate) {
+					parentType = token.value
+					parentTypeStack[0] = token.value
+					continue
+				}
+
+				if (previousTemplate.type === 'empty') {
+					previousTemplate.type = token.value
+					continue
+				}
 				previousTemplate.setClass(token.value, settings)
 				operation = null
 				continue
@@ -82,12 +92,14 @@ export function parseTokens(
 				location = previousTemplate.location
 			}
 			if (token.type === 'child') {
-				parentStack.push(previousTemplate)
-				parentTypeStack.push(parentType)
-				if (previousTemplate.type !== 'empty') {
-					parentType = previousTemplate.type
+				if (previousTemplate) {
+					parentStack.push(previousTemplate)
+					parentTypeStack.push(parentType)
+					if (previousTemplate.type !== 'empty') {
+						parentType = previousTemplate.type
+					}
+					layer++
 				}
-				layer++
 			}
 			if (token.type === 'up') {
 				previousTemplate = parentStack.pop()
@@ -228,6 +240,7 @@ export class Template {
 				this.location = previous.location
 				break
 			case 'child':
+				if (!previous) break
 				previous.child = this
 
 				this.location = previous.getChildLocation()
@@ -286,8 +299,8 @@ export class Template {
 	}
 
 	setClass(type, settings) {
-		this.type = type
 		this.templateSrc = this.getMatchingTemplate(type, settings)
+		this.type = type
 	}
 
 	setId(type, settings) {
