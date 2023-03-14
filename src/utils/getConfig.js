@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export function getConfig() {
+export function getConfig(isAbsolute) {
 	let configLocation = `${process.cwd()}/emmet-gen-templates.json`
 	let previous = null
 
@@ -24,7 +24,7 @@ export function getConfig() {
 		process.exit(1)
 	}
 
-	if (config.relative) {
+	if (config.relative || !isAbsolute) {
 		config.baseUrl = path.resolve(process.cwd(), config.baseUrl)
 	}else {
 		config.baseUrl = path.resolve(configLocation, '..', config.baseUrl)

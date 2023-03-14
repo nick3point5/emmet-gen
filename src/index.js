@@ -51,8 +51,9 @@ program
 program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
+	.option('-p, --path', 'sets the base url relative to the emmet-gen-template.json')
 	.action((input,option) => {
-		const {settings} = getConfig()
+		const {settings} = getConfig(!!option.path)
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
