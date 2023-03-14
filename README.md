@@ -1,20 +1,21 @@
-<h1 align="center" style="border-bottom: none;">emmet-gen</h1>
+<h1 align="center" style="border-bottom: none;">Emmet-Gen</h1>
 <h3 align="center">
 An un-opinionated file template CLI system that works with syntax inspired by a <a href="https://emmet.io/">
 Emmet
 </a>
 </h3>
 <p align="center">
-<a href="https://www.npmjs.com/package/emmet-gen">
-	<img src="https://img.shields.io/npm/v/emmet-gen">
-</a>
-<a href="https://github.com/nick3point5/emmet-gen/tree/main">
-	<img alt="Build states" src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml">
-</a>
-  <a href="https://github.com/semantic-release/semantic-release/actions?query=workflow%3ATest+branch%3Amaster">
-    <img alt="Build states" src="https://github.com/semantic-release/semantic-release/workflows/Test/badge.svg">
-  </a>
+	<a href="https://www.npmjs.com/package/emmet-gen" target="_blank">
+		<img src="https://img.shields.io/npm/v/emmet-gen?style=plastic&logo=npm">
+	</a>
+	<a href="https://github.com/nick3point5/emmet-gen/tree/main" target="_blank">
+		<img alt="Build states" src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml?label=Tests&style=plastic">
+	</a>
+	<a href="https://github.com/nick3point5" target="_blank">
+		<img alt="GitHub" src="https://img.shields.io/badge/GitHub-100000?style=plastic&logo=github&logoColor=white">
+	</a>
 </p>
+
 ---
 
 # Getting started
@@ -24,6 +25,8 @@ Emmet
 npx emmet-gen init
 ```
 * emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for emmet-gen-template.json.
+
+---
 
 # Usage
 ## Templates
