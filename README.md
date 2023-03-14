@@ -15,6 +15,9 @@ Emmet
 		<img alt="GitHub" src="https://img.shields.io/badge/GitHub-100000?style=plastic&logo=github&logoColor=white">
 	</a>
 </p>
+<p align="center">
+  <img src="assets/demo.gif" />
+</p>
 
 ---
 

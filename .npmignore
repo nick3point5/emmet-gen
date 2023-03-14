@@ -1,0 +1,7 @@
+.github/
+.husky/
+.eslintrc.json
+.prettierrc.json
+emmet-gen-templates.json
+emmet-gen-templates/
+assets/
