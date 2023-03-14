@@ -67,6 +67,8 @@ program
 		if(!!option.index || !!settings.auto_imports) {
 			indexer(rootTemplate.getChildLocation(), true)
 		}
+
+		console.log('Done 📂')
 	})
 
 program.parse()
