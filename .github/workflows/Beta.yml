@@ -19,8 +19,8 @@ jobs:
         node-version: 18.x
         registry-url: https://registry.npmjs.org
     - name: Install dependencies
-      run: npm install
-      # run: npx ci
+      # run: npm install
+      run: npx ci
     # - name: Install semantic-release extra plugins
     #   run: npm install --save-dev @semantic-release/changelog @semantic-release/git      
     # - name: Lint
