@@ -36,29 +36,35 @@ program.command('config').action(() => {
 program
 	.command('index')
 	.description('Generate index files using es6 named importing')
-	.argument('[location]')
+	.argument('<location...>')
 	.option('-r, --recursive', 'recursively generate index files')
-	.action((location,option) => {
+	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
+	.action((locations,option) => {
 		const {settings, settingsLocation} = getConfig()
-		if(settings.relative) {
-			location = path.resolve(process.cwd(),settings.baseUrl,location)
-		} else {
-			location = path.resolve(settingsLocation,settings.baseUrl,location)
-		}
-		indexer(location, !!option.recursive)
+		locations.forEach(location => {
+			if(settings.relative && !option.absolute) {
+				location = path.resolve(process.cwd(),settings.baseUrl,location)
+			} else {
+				location = path.resolve(settingsLocation,'..',location)
+			}
+			console.log(path.resolve(location))
+			indexer(location, !!option.recursive)
+		})
+
 	})
 
 program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
+	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
 	.action((input,option) => {
-		const {settings} = getConfig()
+		const {settings} = getConfig(!!option.absolute)
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
 		generateTemplate(rootTemplate, settings)
 
-		if(!!option.index || settings.auto_imports) {
+		if(!!option.index || !!settings.auto_imports) {
 			indexer(rootTemplate.getChildLocation(), true)
 		}
 	})
