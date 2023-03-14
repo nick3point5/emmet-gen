@@ -2,6 +2,9 @@
 
 An un-opinionated file template CLI system that works with syntax inspired by [emmet](https://emmet.io/).
 
+<img src="https://img.shields.io/npm/v/emmet-gen">
+<img src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml">
+
 ---
 
 # Getting started
@@ -49,7 +52,7 @@ npx emmet-gen hello\>to+the^world
 ```shell
 npx emmet-gen hello\>world\$\*5
 ```
-#### ID: # 
+#### ID: \# 
   sets the template of the preceding tag
 ```shell
 npx emmet-gen hello#file\>world

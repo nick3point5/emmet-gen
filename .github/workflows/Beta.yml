@@ -1,7 +1,8 @@
-name: Release
+name: Beta-Release
+
 on:
   push:
-    branches: [ main ]
+    branches: [beta]
 
 jobs:
   release:
@@ -17,15 +18,10 @@ jobs:
         node-version: 18.x
         registry-url: https://registry.npmjs.org
     - name: Install dependencies
-      run: npx ci    
+      run: npx ci      
     - name: Lint
       run: npm run lint:fix
     - name: Test
       run: npm run test:gh --if-present
     # - name: Build
-    #   run: npm run build      
-    - name: Publish package on NPM 📦
-      run: npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   run: npm run build
