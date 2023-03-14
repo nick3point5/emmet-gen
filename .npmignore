@@ -5,3 +5,4 @@
 emmet-gen-templates.json
 emmet-gen-templates/
 assets/
+**/*.test.js

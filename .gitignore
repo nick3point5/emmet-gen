@@ -2,5 +2,3 @@ node_modules/
 dist/
 .husky/
 testing/
-src/utils/parseString/parseString.test.js
-**/*.test.js
