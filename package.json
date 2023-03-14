@@ -1,6 +1,6 @@
 {
   "name": "emmet-gen",
-  "version": "0.9.3",
+  "version": "0.9.2",
   "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
@@ -12,8 +12,7 @@
     "test": "vitest",
     "prettier": "npx prettier --write ./src",
     "lint:fix": "eslint --ext .js --ignore-path .gitignore .  --fix",
-    "lint": "eslint --ext .js --ignore-path .gitignore .",
-    "precommit:minor": "eslint --ext .js --ignore-path .gitignore ."
+    "lint": "eslint --ext .js --ignore-path .gitignore ."
   },
   "keywords": [
     "generate",
@@ -52,9 +51,7 @@
   "homepage": "https://github.com/nick3point5/emmet-gen#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "if branch is dev; then npm run precommit:minor;",
-      "minor-commit": "npm version minor",
-      "major-commit": "npm version major"
+      "pre-commit": "if branch is dev; then npm run precommit:minor;"
     }
   },
   "bin": "./src/index.js"
