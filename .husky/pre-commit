@@ -3,6 +3,11 @@
 
 # Increment the version number using the npm version command
 # npm version patch --no-git-tag-version
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$branch" = "dev" ]; then
+	echo "dev branch is special, blabla..."
+fi
+
 npm run lint:fix
 
 # Add the updated package.json to the commit
