@@ -42,7 +42,7 @@ export function parseTokens(
 					continue
 				}
 
-				if (previousTemplate.type === 'empty') {
+				if (previousOperation === 'empty') {
 					previousTemplate.type = token.value
 					continue
 				}

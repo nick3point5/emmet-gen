@@ -248,33 +248,6 @@ describe('should parse tokens', () => {
 
 		expect(root).toStrictEqual(hello)
 	})
-	test('empty classes should apply to children', () => {
-		const string = '/hello.test>world'
-		const emmetString = parseString(string)
-		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
-
-		const world = new Template({
-			name: 'world',
-			location: `${settings.baseUrl}/hello`,
-			type: 'test',
-			settings,
-		})
-
-		const hello = new Template({
-			name: 'hello',
-			location: settings.baseUrl,
-			type: 'test',
-			child: world,
-			settings,
-		})
-
-		hello.templateSrc = path.resolve(settings.templatesSource,'./empty')
-
-		console.log(root)
-
-		expect(root).toStrictEqual(hello)
-	})
 	test('empty should not apply to children', () => {
 		const string = '/hello>world'
 		const emmetString = parseString(string)
@@ -310,6 +283,40 @@ describe('should parse tokens', () => {
 			type: 'test',
 			settings,
 		})
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('class should overwrite empty parent', () => {
+		const string = '/hello/world/thing.test'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken, settings)
+
+		const thing = new Template({
+			name: 'thing',
+			location: `${settings.baseUrl}/hello/world`,
+			type: 'test',
+			settings,
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${settings.baseUrl}/hello`,
+			type: 'empty',
+			child: thing,
+			settings,
+		})
+		const hello = new Template({
+			name: 'hello',
+			location: settings.baseUrl,
+			type: 'empty',
+			child: world,
+			settings,
+		})
+
+		hello.templateSrc = path.resolve(settings.templatesSource,'./empty')
+		world.templateSrc = path.resolve(settings.templatesSource,'./empty')
+		thing.templateSrc = path.resolve(settings.templatesSource,'./test')
 
 		expect(root).toStrictEqual(hello)
 	})
