@@ -12,7 +12,8 @@
     "test": "vitest",
     "prettier": "npx prettier --write ./src",
     "lint:fix": "eslint --ext .js --ignore-path .gitignore .  --fix",
-    "lint": "eslint --ext .js --ignore-path .gitignore ."
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "precommit:minor": "eslint --ext .js --ignore-path .gitignore ."
   },
   "keywords": [
     "generate",
@@ -51,7 +52,8 @@
   "homepage": "https://github.com/nick3point5/emmet-gen#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run precommit"
+      "pre-commit": "if branch is dev; then npm run precommit:minor;",
+      "minor-commit": "npm version patch --no-git-tag-version"
     }
   },
   "bin": "./src/index.js"
