@@ -3,12 +3,12 @@
 
 # Increment the version number using the npm version command
 branch="$(git rev-parse --abbrev-ref HEAD)"
-# if [ "$branch" = "dev" ]; then
-# 	npm version patch --no-git-tag-version
-# fi
-# if [ "$branch" = "beta" ]; then
-# 	npm version minor
-# fi
+if [ "$branch" = "dev" ]; then
+	npm version patch --no-git-tag-version
+fi
+if [ "$branch" = "beta" ]; then
+	npm version minor
+fi
 
 npm run lint:fix
 
