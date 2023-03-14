@@ -20,11 +20,12 @@ Emmet
 
 # Getting started
 ## Installation
-* Before emmet-gen can be used it should be initialized with the command 
+* Download and install [Node.js](https://nodejs.org/en/download/). Node.js 14 or higher is required.
+* Before emmet-gen can be used, it should be initialized with the command 
 ```shell
 npx emmet-gen init
 ```
-* emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for emmet-gen-template.json.
+* emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for <b>emmet-gen-template.json</b>.
 
 ---
 
@@ -34,7 +35,8 @@ npx emmet-gen init
 * Every directory at the top of `emmet-gen-template` is a template route.
 * The name of the template will be the name used as a class or id.
 * Any name or text within a file with `__TemplateName__` will be replaced by the tag of the template.
-* Each template must contain exactly 1 directory or file at the top. The top directory can have any amount of files and subdirectories.
+* Each template must contain exactly 1 directory or file at the top.
+* Directories can have any amount of files and subdirectories.
 
 ## Commands
 ### Emmet
