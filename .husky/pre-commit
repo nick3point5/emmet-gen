@@ -5,7 +5,7 @@
 # npm version patch --no-git-tag-version
 branch="$(git rev-parse --abbrev-ref HEAD)"
 if [ "$branch" = "dev" ]; then
-	echo "dev branch is special, blabla..."
+	npm version patch --no-git-tag-version
 fi
 
 npm run lint:fix
