@@ -33,8 +33,10 @@ jobs:
     #   run: npm run build      
     # - name: Publish package on NPM 📦
     #   run: npm publish
-    - name: NPM Publisher
-      uses: lyzhang1999/npm-publish@v1.0.2
+    - uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}
+    - name: NPM Publisher
+      uses: lyzhang1999/npm-publish@v1.0.2
+
 
