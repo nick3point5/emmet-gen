@@ -1,10 +1,20 @@
-# `emmet-gen`
-
-An un-opinionated file template CLI system that works with syntax inspired by [emmet](https://emmet.io/).
-
-<img src="https://img.shields.io/npm/v/emmet-gen">
-<img src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml">
-
+<h1 align="center" style="border-bottom: none;">emmet-gen</h1>
+<h3 align="center">
+An un-opinionated file template CLI system that works with syntax inspired by a <a href="https://emmet.io/">
+Emmet
+</a>
+</h3>
+<p align="center">
+<a href="https://www.npmjs.com/package/emmet-gen">
+	<img src="https://img.shields.io/npm/v/emmet-gen">
+</a>
+<a href="https://github.com/nick3point5/emmet-gen/tree/main">
+	<img alt="Build states" src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml">
+</a>
+  <a href="https://github.com/semantic-release/semantic-release/actions?query=workflow%3ATest+branch%3Amaster">
+    <img alt="Build states" src="https://github.com/semantic-release/semantic-release/workflows/Test/badge.svg">
+  </a>
+</p>
 ---
 
 # Getting started
@@ -25,9 +35,9 @@ npx emmet-gen init
 
 ## Commands
 ### Emmet
-* Emmet-gen with parse a string argument with emmet like syntax.
+* Emmet-gen with parse a string argument with emmet-like syntax.
 * It should be noted depending on your terminal shell you will have to escape some special characters.
-* Here are the following syntax supported by emmet-gen using bash
+* Here are the following syntax supported by emmet-gen using bash.
 
 #### Child: > 
   makes the following tag a child 
@@ -97,4 +107,4 @@ npx emmet-gen index ./hello -r
 ```shell
 npx emmet-gen hello\>\(to\$+the\$+world\$\)\*5 -i
 ```
-* Index files with be generated without the flag by changed in the emmet-gen-template.json by ```"auto_imports": true,```.
+* Index files with be generated without the flag by changing in the emmet-gen-template.json by ```"auto_imports": true,```.
