@@ -1,6 +1,6 @@
 {
   "name": "emmet-gen",
-  "version": "0.8.5",
+  "version": "1.0.0",
   "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
   "main": "src/index.js",
   "type": "module",
@@ -51,7 +51,7 @@
   "homepage": "https://github.com/nick3point5/emmet-gen#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run precommit"
+      "pre-commit": "if branch is dev; then npm run precommit:minor;"
     }
   },
   "bin": "./src/index.js"

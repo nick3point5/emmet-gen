@@ -1,19 +1,33 @@
-# `emmet-gen`
-
-An un-opinionated file template CLI system that works with syntax inspired by [emmet](https://emmet.io/).
-
-<img src="https://img.shields.io/npm/v/emmet-gen">
-<img src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml">
+<h1 align="center" style="border-bottom: none;">Emmet-Gen</h1>
+<h3 align="center">
+An un-opinionated file template CLI system that works with syntax inspired by a <a href="https://emmet.io/">
+Emmet
+</a>
+</h3>
+<p align="center">
+	<a href="https://www.npmjs.com/package/emmet-gen" target="_blank">
+		<img src="https://img.shields.io/npm/v/emmet-gen?style=plastic&logo=npm">
+	</a>
+	<a href="https://github.com/nick3point5/emmet-gen/tree/main" target="_blank">
+		<img alt="Build states" src="https://img.shields.io/github/actions/workflow/status/nick3point5/emmet-gen/release.yml?label=Tests&style=plastic">
+	</a>
+	<a href="https://github.com/nick3point5" target="_blank">
+		<img alt="GitHub" src="https://img.shields.io/badge/GitHub-100000?style=plastic&logo=github&logoColor=white">
+	</a>
+</p>
 
 ---
 
 # Getting started
 ## Installation
-* Before emmet-gen can be used it should be initialized with the command 
+* Download and install [Node.js](https://nodejs.org/en/download/). Node.js 14 or higher is required.
+* Before emmet-gen can be used, it should be initialized with the command 
 ```shell
 npx emmet-gen init
 ```
-* emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for emmet-gen-template.json.
+* emmet-gen can be used in any sub-directory. emmet-gen will search up the file tree for <b>emmet-gen-template.json</b>.
+
+---
 
 # Usage
 ## Templates
@@ -21,13 +35,14 @@ npx emmet-gen init
 * Every directory at the top of `emmet-gen-template` is a template route.
 * The name of the template will be the name used as a class or id.
 * Any name or text within a file with `__TemplateName__` will be replaced by the tag of the template.
-* Each template must contain exactly 1 directory or file at the top. The top directory can have any amount of files and subdirectories.
+* Each template must contain exactly 1 directory or file at the top.
+* Directories can have any amount of files and subdirectories.
 
 ## Commands
 ### Emmet
-* Emmet-gen with parse a string argument with emmet like syntax.
+* Emmet-gen with parse a string argument with emmet-like syntax.
 * It should be noted depending on your terminal shell you will have to escape some special characters.
-* Here are the following syntax supported by emmet-gen using bash
+* Here are the following syntax supported by emmet-gen using bash.
 
 #### Child: > 
   makes the following tag a child 
@@ -97,4 +112,4 @@ npx emmet-gen index ./hello -r
 ```shell
 npx emmet-gen hello\>\(to\$+the\$+world\$\)\*5 -i
 ```
-* Index files with be generated without the flag by changed in the emmet-gen-template.json by ```"auto_imports": true,```.
+* Index files with be generated without the flag by changing in the emmet-gen-template.json by ```"auto_imports": true,```.
