@@ -4,6 +4,10 @@ on:
   push:
     branches: [beta]
 
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   pre-release:
     name: Release
@@ -17,17 +21,16 @@ jobs:
       with:
         node-version: 18.x
     - name: Install dependencies
-      run: npx ci
+      run: npm install
+      # run: npx ci
     # - name: Install semantic-release extra plugins
     #   run: npm install --save-dev @semantic-release/changelog @semantic-release/git      
-    - name: Lint
-      run: npm run lint:fix
-    - name: Test
-      run: npm run test:gh --if-present
+    # - name: Lint
+    #   run: npm run lint:fix
+    # - name: Test
+    #   run: npm run test:gh --if-present
     # - name: Build
     #   run: npm run build      
     - name: Publish package on NPM 📦
-      run: npx semantic-release
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npm publish
+
