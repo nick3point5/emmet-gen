@@ -24,7 +24,9 @@ export function getConfig(isAbsolute) {
 		process.exit(1)
 	}
 
-	if (config.relative || !isAbsolute) {
+	if(isAbsolute) config.relative = false
+
+	if (config.relative) {
 		config.baseUrl = path.resolve(process.cwd(), config.baseUrl)
 	}else {
 		config.baseUrl = path.resolve(configLocation, '..', config.baseUrl)
