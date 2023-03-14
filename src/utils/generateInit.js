@@ -18,7 +18,11 @@ export function generateInit(type) {
 
 	copyDirectoryContents(sourcePath, destPath)
 
-	fs.unlinkSync(
-		path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.gitignore`),
-	)
+	const emptyNames = fs.readdirSync(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__`)
+	emptyNames.forEach(name => {
+		fs.unlinkSync(
+			path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/${name}`),
+		)
+	})
+
 }
