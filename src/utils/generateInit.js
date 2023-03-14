@@ -8,9 +8,9 @@ const __dirname = path.dirname(__filename)
 
 export function generateInit(type) {
 	let sourcePath
-	if(type === 'test') {
+	if (type === 'test') {
 		sourcePath = path.resolve(`${__dirname}/../data/initTest`)
-	}else {
+	} else {
 		sourcePath = path.resolve(`${__dirname}/../data/init`)
 	}
 
@@ -18,7 +18,17 @@ export function generateInit(type) {
 
 	copyDirectoryContents(sourcePath, destPath)
 
-	fs.unlinkSync(
-		path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.gitignore`),
-	)
+	try {
+		fs.unlinkSync(
+			path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.gitignore`),
+		)
+	} catch (error) {
+		try {
+			fs.unlinkSync(
+				path.resolve(`${process.cwd()}/emmet-gen-templates/empty/__TemplateName__/.npmignore`),
+			)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 }
