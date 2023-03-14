@@ -11,7 +11,7 @@
     "test:gh": "node ./src/index.js init test && vitest",
     "test": "vitest",
     "prettier": "npx prettier --write ./src",
-    "lint:fix": "eslint --ext .js --ignore-path .gitignore .  --fix",
+    "lint:fix": "eslint --ext .js --ignore-path .gitignore . --fix",
     "lint": "eslint --ext .js --ignore-path .gitignore ."
   },
   "keywords": [
