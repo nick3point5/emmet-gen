@@ -58,5 +58,5 @@
       "pre-commit": "if branch is dev; then npm run precommit:minor;"
     }
   },
-  "bin": "./src/index.js"
+  "bin": "./dist/index.js"
 }
