@@ -4,5 +4,5 @@
 .prettierrc.json
 assets/
 **/*.test.js
-**/*.test.js.map
+**/*.map
 src/
