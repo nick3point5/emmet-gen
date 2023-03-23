@@ -1,4 +1,4 @@
-import { EmmetToken } from "../EmmetToken/EmmetToken"
+import { EmmetToken } from "../EmmetToken/EmmetToken.js"
 
 export function parseEmmet(emmetStrings: string[]) {
 	const emmetTokens = []

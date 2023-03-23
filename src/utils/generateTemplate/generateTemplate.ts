@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { Template } from '../Template/Template'
+import { Template } from '../Template/Template.js'
 
 export function generateTemplate(root: Template) {
 	const queue = [root]

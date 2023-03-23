@@ -10,7 +10,10 @@ export function getConfig(isAbsolute?: boolean) {
 		previous = configLocation
 		configLocation = path.resolve(`${configLocation}/../../emmet-gen-templates.json`)
 
+
 		if (previous === configLocation) {
+			console.log(previous)
+			console.log(configLocation)
 			console.error('no emmet-gen-templates.json found')
 			process.exit(1)
 		}

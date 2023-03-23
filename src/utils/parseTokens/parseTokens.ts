@@ -1,6 +1,6 @@
 import type ConfigType from '../../data/init/emmet-gen-templates.json'
-import type { EmmetToken } from '../EmmetToken/EmmetToken'
-import { Template } from '../Template/Template'
+import type { EmmetToken } from '../EmmetToken/EmmetToken.js'
+import { Template } from '../Template/Template.js'
 
 type GroupLinkType = {
 	template: Template | null
@@ -241,8 +241,8 @@ function replaceCountMarker(name: string, count: number, countLength: number) {
 }
 
 function linkGroup(root: Template, groupLink: GroupLinkType, groupTemplate: Template) {
-	if(groupLink.template === null) {
-		return root
+	if(groupLink.template === null || groupLink.type === null) {
+		return groupTemplate
 	}
 
 	if (groupLink.type === 'sibling') {
@@ -254,9 +254,6 @@ function linkGroup(root: Template, groupLink: GroupLinkType, groupTemplate: Temp
 	}
 	if (groupLink.type === 'child') {
 		groupLink.template.child = groupTemplate
-	}
-	if (groupLink.type === null) {
-		root = groupTemplate
 	}
 
 	return root

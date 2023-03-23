@@ -1,5 +1,5 @@
 import path from 'path'
-import { copyDirectoryContents } from './copyDirectoryContents'
+import { copyDirectoryContents } from './copyDirectoryContents.js'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
 

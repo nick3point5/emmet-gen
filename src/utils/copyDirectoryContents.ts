@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-export function copyDirectoryContents(source, destination) {
+export function copyDirectoryContents(source:string, destination:string) {
 	const items = fs.readdirSync(source)
 
 	const files = []
