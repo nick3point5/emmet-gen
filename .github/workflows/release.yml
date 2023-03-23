@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   release:
@@ -9,23 +9,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3.3.0
-    - name: Setup Node.js
-      uses: actions/setup-node@v3.6.0
-      with:
-        node-version: 18.x
-        registry-url: https://registry.npmjs.org
-    - name: Install dependencies
-      run: npx ci    
-    - name: Lint
-      run: npm run lint:fix
-    - name: Test
-      run: npm run test:gh --if-present
-    # - name: Build
-    #   run: npm run build      
-    - name: Publish package on NPM 📦
-      run: npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 18.x
+          registry-url: https://registry.npmjs.org
+      - name: Install dependencies
+        run: npx ci
+      - name: Build
+        run: npm run build
+      - name: Lint
+        run: npm run lint:fix
+      - name: Test
+        run: npm run test:gh --if-present
+      # - name: Build
+      #   run: npm run build
+      - name: Publish package on NPM 📦
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

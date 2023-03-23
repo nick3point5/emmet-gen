@@ -1,18 +1,19 @@
 {
   "name": "emmet-gen",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "precommit": "",
     "prepare": "husky install",
-    "start": "node ./src/index.js",
-    "test:gh": "node ./src/index.js init test && vitest",
+    "start": "node ./dist/index.js",
+    "test:gh": "node ./dist/index.js init test && vitest",
     "test": "vitest",
-    "prettier": "npx prettier --write ./src",
+    "prettier": "npx prettier --write ./dist",
     "lint:fix": "eslint --ext .js --ignore-path .gitignore . --fix",
-    "lint": "eslint --ext .js --ignore-path .gitignore ."
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "build": "npx tsc"
   },
   "keywords": [
     "generate",
@@ -31,11 +32,13 @@
   "author": "nick3point5",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^18.15.5",
     "eslint": "^8.35.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.25.2",
     "husky": "^8.0.3",
+    "typescript": "^5.0.2",
     "vite": "^4.1.4",
     "vitest": "^0.29.2"
   },
