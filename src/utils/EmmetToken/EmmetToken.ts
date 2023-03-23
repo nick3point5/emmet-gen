@@ -1,17 +1,7 @@
-export function parseEmmet(emmetStrings) {
-	const emmetTokens = []
-
-	for (let i = 0; i < emmetStrings.length; i++) {
-		const tokenString = emmetStrings[i]
-
-		emmetTokens.push(new EmmetToken(tokenString))
-	}
-
-	return emmetTokens
-}
-
 export class EmmetToken {
-	constructor(tokenString) {
+	type: string
+	value: string
+	constructor(tokenString:string) {
 		const firstChar = tokenString[0]
 		let type
 		let value

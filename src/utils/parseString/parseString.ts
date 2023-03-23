@@ -1,6 +1,8 @@
-export function parseString(string) {
+type StringMap = { [key: string]: string }
+
+export function parseString(string: string) {
 	const regexArray = []
-	const regexOptions = {
+	const regexOptions:StringMap = {
 		idRegex: '\\#',
 		classRegex: '\\.',
 		siblingRegex: '\\+',
@@ -23,5 +25,5 @@ export function parseString(string) {
 	const emmetRegex = new RegExp(`(${regexArray.join('|')})`, 'g')
 
 	const emmetStrings = string.match(emmetRegex)
-	return emmetStrings
+	return emmetStrings || []
 }

@@ -1,10 +1,15 @@
 import { expect } from 'vitest'
 import { test, describe } from 'vitest'
-import { parseEmmet, EmmetToken } from './parseEmmet.js'
-import { parseString } from '../parseString/parseString.js'
+import { EmmetToken } from './EmmetToken'
+
+type TokenMap = { [key: string]: {
+	string:string,
+	value:string,
+	type:string
+}}
 
 describe('EmmetToken class', () => {
-	const tokens = {
+	const tokens:TokenMap = {
 		name: {
 			string: 'hello',
 			value: 'hello',
@@ -80,31 +85,4 @@ describe('EmmetToken class', () => {
 			expect(result.type).toStrictEqual(type)
 		})
 	}
-})
-
-describe('should parse emmet', () => {
-	test('default', () => {
-		const string = 'hello.world>this+is>(an#example)*5'
-		const emmetStrings = parseString(string)
-		const result = parseEmmet(emmetStrings)
-
-		const correct = [
-			new EmmetToken('hello'),
-			new EmmetToken('.'),
-			new EmmetToken('world'),
-			new EmmetToken('>'),
-			new EmmetToken('this'),
-			new EmmetToken('+'),
-			new EmmetToken('is'),
-			new EmmetToken('>'),
-			new EmmetToken('('),
-			new EmmetToken('an'),
-			new EmmetToken('#'),
-			new EmmetToken('example'),
-			new EmmetToken(')'),
-			new EmmetToken('*5'),
-		]
-
-		expect(result).toStrictEqual(correct)
-	})
 })

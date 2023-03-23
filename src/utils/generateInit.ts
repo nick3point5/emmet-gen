@@ -1,12 +1,12 @@
 import path from 'path'
-import { copyDirectoryContents } from './copyDirectoryContents.js'
+import { copyDirectoryContents } from './copyDirectoryContents'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-export function generateInit(type) {
+export function generateInit(type: string) {
 	let sourcePath
 	if (type === 'test') {
 		sourcePath = path.resolve(`${__dirname}/../data/initTest`)

@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
+import type ConfigType from '../data/init/emmet-gen-templates.json'
 
-export function getConfig(isAbsolute) {
+export function getConfig(isAbsolute?: boolean) {
 	let configLocation = `${process.cwd()}/emmet-gen-templates.json`
 	let previous = null
 
@@ -15,7 +16,7 @@ export function getConfig(isAbsolute) {
 		}
 	}
 
-	const config = JSON.parse(fs.readFileSync(configLocation))
+	const config:typeof ConfigType = JSON.parse(fs.readFileSync(configLocation).toString())
 
 	const templatesSrc = path.resolve(configLocation, '..',config.templatesSource)
 

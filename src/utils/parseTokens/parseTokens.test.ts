@@ -1,12 +1,13 @@
 import path from 'path'
 import { expect } from 'vitest'
 import { test, describe } from 'vitest'
-import { parseTokens, Template } from './parseTokens.js'
+import { parseTokens } from './parseTokens.js'
 import { parseString } from '../parseString/parseString.js'
 import { parseEmmet } from '../parseEmmet/parseEmmet.js'
 import { getConfig } from '../getConfig.js'
+import { Template } from '../Template/Template.js'
 
-const {settings} = getConfig()
+const { settings } = getConfig()
 
 describe('should parse tokens', () => {
 	test('siblings', () => {
@@ -112,7 +113,7 @@ describe('should parse tokens', () => {
 
 		const n = 10
 		for (let i = 0; i < n; i++) {
-			const helloCopy = new Template({
+			const helloCopy: Template = new Template({
 				name: `hello${i + 1}`,
 				location: settings.baseUrl,
 				type: 'default',
@@ -122,7 +123,7 @@ describe('should parse tokens', () => {
 
 			if (i === 0) {
 				hello = helloCopy
-			} else {
+			} else if (previous) {
 				previous.nextSibling = helloCopy
 			}
 			previous = helloCopy
@@ -142,7 +143,7 @@ describe('should parse tokens', () => {
 
 		const n = 10
 		for (let i = 4; i < n; i++) {
-			const helloCopy = new Template({
+			const helloCopy: Template = new Template({
 				name: `hello${i + 1}`,
 				location: settings.baseUrl,
 				type: 'default',
@@ -152,7 +153,7 @@ describe('should parse tokens', () => {
 
 			if (i === 4) {
 				hello = helloCopy
-			} else {
+			} else if (previous) {
 				previous.nextSibling = helloCopy
 			}
 			previous = helloCopy
@@ -189,7 +190,7 @@ describe('should parse tokens', () => {
 
 			if (i === 0) {
 				hello = helloCopy
-			} else {
+			} else if (previous) {
 				previous.nextSibling = helloCopy
 			}
 			previous = worldCopy
@@ -230,7 +231,7 @@ describe('should parse tokens', () => {
 
 		const n = 5
 		for (let i = 0; i < n; i++) {
-			const helloCopy = new Template({
+			const helloCopy: Template = new Template({
 				name: `hello${i + 1}`,
 				location: settings.baseUrl,
 				type: 'default',
@@ -239,7 +240,7 @@ describe('should parse tokens', () => {
 			})
 			if (i === 0) {
 				hello = helloCopy
-			} else {
+			} else if (previous) {
 				previous.nextSibling = helloCopy
 			}
 			helloCopy.replacements = worldMap
@@ -314,9 +315,9 @@ describe('should parse tokens', () => {
 			settings,
 		})
 
-		hello.templateSrc = path.resolve(settings.templatesSource,'./empty')
-		world.templateSrc = path.resolve(settings.templatesSource,'./empty')
-		thing.templateSrc = path.resolve(settings.templatesSource,'./test')
+		hello.templateSrc = path.resolve(settings.templatesSource, './empty')
+		world.templateSrc = path.resolve(settings.templatesSource, './empty')
+		thing.templateSrc = path.resolve(settings.templatesSource, './test')
 
 		expect(root).toStrictEqual(hello)
 	})
@@ -348,9 +349,9 @@ describe('should parse tokens', () => {
 			settings,
 		})
 
-		hello.templateSrc = path.resolve(settings.templatesSource,'./empty')
-		world.templateSrc = path.resolve(settings.templatesSource,'./empty')
-		thing.templateSrc = path.resolve(settings.templatesSource,'./test')
+		hello.templateSrc = path.resolve(settings.templatesSource, './empty')
+		world.templateSrc = path.resolve(settings.templatesSource, './empty')
+		thing.templateSrc = path.resolve(settings.templatesSource, './test')
 
 		expect(root).toStrictEqual(hello)
 	})

@@ -1,12 +1,15 @@
 import fs from 'fs'
 import path from 'path'
+import { Template } from '../Template/Template'
 
-export function generateTemplate(root) {
+export function generateTemplate(root: Template) {
 	const queue = [root]
 	let nextLevel = []
 
 	while (queue.length > 0) {
 		const template = queue.shift()
+		if(!template) break
+
 		const { templateSrc, location, child, nextSibling } = template
 
 		if (child) {
@@ -26,7 +29,7 @@ export function generateTemplate(root) {
 	}
 }
 
-function createTemplate(source, destination, template) {
+function createTemplate(source:string, destination:string, template: Template) {
 	const items = fs.readdirSync(source)
 
 	const files = []

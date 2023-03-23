@@ -12,7 +12,7 @@ import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 import { indexer } from './utils/indexer/indexer.js'
 
 const pkgLocation = new URL('../package.json', import.meta.url)
-const pkg = JSON.parse(fs.readFileSync(pkgLocation))
+const pkg = JSON.parse(fs.readFileSync(pkgLocation).toString())
 
 const { version, description } = pkg
 const program = new Command()
@@ -39,7 +39,7 @@ program
 	.argument('<location...>')
 	.option('-r, --recursive', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
-	.action((locations,option) => {
+	.action((locations:string[],option) => {
 		const {settings, settingsLocation} = getConfig()
 		locations.forEach(location => {
 			if(settings.relative && !option.absolute) {
@@ -62,7 +62,7 @@ program
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
-		generateTemplate(rootTemplate, settings)
+		generateTemplate(rootTemplate)
 
 		if(!!option.index || !!settings.auto_imports) {
 			indexer(rootTemplate.getChildLocation(), true)

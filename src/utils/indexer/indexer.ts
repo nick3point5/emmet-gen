@@ -5,7 +5,7 @@ const regexExtensionsString = `(\\${exportableExtensions.join('|\\')})$`
 const regexExtensions = new RegExp(`${regexExtensionsString}`, 'g')
 const isIndex = new RegExp(`(index)${regexExtensionsString}`, 'g')
 
-export function indexer(source, recursive = false, isTypeScript = false) {
+export function indexer(source: fs.PathLike, recursive = false, isTypeScript = false) {
 	const collator = new Intl.Collator(undefined, {
 		numeric: true,
 		sensitivity: 'base',

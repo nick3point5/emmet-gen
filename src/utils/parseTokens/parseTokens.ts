@@ -1,28 +1,33 @@
-import fs from 'fs'
-import path from 'path'
-import { getReplacementMap } from '../getReplacementMap.js'
+import type ConfigType from '../../data/init/emmet-gen-templates.json'
+import type { EmmetToken } from '../EmmetToken/EmmetToken'
+import { Template } from '../Template/Template'
+
+type GroupLinkType = {
+	template: Template | null
+	type: string | null
+}
 
 export function parseTokens(
-	emmetTokens,
-	settings,
-	rootSrc = null,
-	groupCountLength = null,
-	groupCount = null,
+	emmetTokens: EmmetToken[],
+	settings: typeof ConfigType,
+	rootSrc = '',
+	groupCountLength = 0,
+	groupCount = 0,
 ) {
 	let location = rootSrc || settings.baseUrl
 	let previousTemplate = null
-	let previousOperation = null
-	let parentStack = []
+	let previousOperation = ''
+	let parentStack: Template[] = []
 	let parentTypeStack = ['default']
 	let root = null
-	let operation = null
+	let operation = ''
 	let parentType = 'default'
 	let multiplyStart = 1
 	let layer = 1
 	const groupLayer = []
 	const groupTokens = []
 	const groupLinks = []
-	let groupLink = {
+	let groupLink: GroupLinkType = {
 		template: null,
 		type: null,
 	}
@@ -47,19 +52,19 @@ export function parseTokens(
 					continue
 				}
 				previousTemplate.setClass(token.value, settings)
-				operation = null
+				operation = ''
 				continue
 			}
 
 			if (operation === 'id') {
-				previousTemplate.setId(token.value, settings)
-				operation = null
+				previousTemplate?.setId(token.value, settings)
+				operation = ''
 				continue
 			}
 
 			if (groupCountLength) {
 				const match = token.value.match(/\$+/g)
-				if (match) {
+				if (match !== null) {
 					groupCountLength = match[0].length
 				}
 			}
@@ -69,7 +74,7 @@ export function parseTokens(
 				? token.value
 				: replaceCountMarker(token.value, groupCount, groupCountLength)
 
-			let template = new Template({
+			let template: Template = new Template({
 				name,
 				location,
 				operation,
@@ -78,7 +83,7 @@ export function parseTokens(
 				settings,
 			})
 
-			operation = null
+			operation = ''
 			location = template.location
 
 			if (!root) {
@@ -89,7 +94,7 @@ export function parseTokens(
 		} else {
 			operation = token.type
 			if (token.type === 'sibling') {
-				location = previousTemplate.location
+				location = previousTemplate?.location || location
 			}
 			if (token.type === 'child') {
 				if (previousTemplate) {
@@ -103,18 +108,12 @@ export function parseTokens(
 			}
 			if (token.type === 'up') {
 				previousTemplate = parentStack.pop()
-				parentType = parentTypeStack.pop()
-				location = previousTemplate.location
+				parentType = parentTypeStack.pop() || 'default'
+				location = previousTemplate?.location || location
 				layer--
 			}
-			if (previousOperation === 'empty') {
-				parentStack.push(previousTemplate)
-				parentTypeStack.push(parentType)
-				location = previousTemplate.getChildLocation()
-				layer++
-			}
 			if (token.type === 'multiply') {
-				const match = previousTemplate.name.match(/\$+/g)
+				const match = previousTemplate?.name.match(/\$+/g)
 				if (!match) {
 					console.error('root template must have "$" in name')
 				}
@@ -124,10 +123,14 @@ export function parseTokens(
 				if (previousOperation === 'closeGroup') {
 					groupTokens.pop()
 					groupTokens.pop()
-					const captureTokens = []
+					const captureTokens: EmmetToken[] = []
 					let groupToken
 					while (groupToken?.type !== 'openGroup') {
 						groupToken = groupTokens.pop()
+						if(!groupToken) {
+							console.error('grouping parentheses unmatched')
+							process.exit(1)
+						}
 						captureTokens.unshift(groupToken)
 					}
 
@@ -140,7 +143,12 @@ export function parseTokens(
 					let groupSrc = groupLink.template?.location || location
 
 					if (groupLink.type === 'child') {
-						groupSrc = groupLink.template.getChildLocation()
+						groupSrc = groupLink.template?.getChildLocation() || location
+					}
+
+					if(!root) {
+						console.log('invalid emmet')
+						process.exit(1)
 					}
 
 					for (let i = multiplyStart - 1; i < n; i++) {
@@ -150,8 +158,8 @@ export function parseTokens(
 						groupLink.type = 'sibling'
 						previousTemplate = groupTemplate
 					}
-				} else {
-					let replacementMap = null
+				} else if(previousTemplate){
+					let replacementMap: Map<string, string> | null = null
 					if (previousOperation === 'attr') {
 						replacementMap = previousTemplate.replacements
 					}
@@ -163,7 +171,7 @@ export function parseTokens(
 					for (let i = multiplyStart; i < n; i++) {
 						const name = replaceCountMarker(countName, i + 1, countLength)
 
-						let template = new Template({
+						let template: Template = new Template({
 							name,
 							location,
 							operation: 'sibling',
@@ -187,137 +195,56 @@ export function parseTokens(
 				groupLayer.push(layer)
 				groupTokens.push(token)
 				groupLink = {
-					template: previousTemplate,
+					template: previousTemplate || null,
 					type: previousOperation,
 				}
 				groupLinks.push(groupLink)
 			}
 			if (token.type === 'closeGroup') {
-				const openLayer = groupLayer.pop(layer)
+				const openLayer = groupLayer.pop()
 				while (openLayer !== layer) {
 					previousTemplate = parentStack.pop()
-					parentType = parentTypeStack.pop()
+					parentType = parentTypeStack.pop() || 'default'
 					layer--
 				}
-				groupLink = groupLinks.pop()
+				if(groupLinks.length === 0) {
+					console.log('unmatched parentheses')
+					process.exit(1)
+				}
+				groupLink = groupLinks.pop()!
 			}
 			if (token.type === 'attr') {
-				previousTemplate.setReplacements(token.value)
+				previousTemplate?.setReplacements(token.value)
+			}
+			if (previousOperation === 'empty' && previousTemplate) {
+				parentStack.push(previousTemplate)
+				parentTypeStack.push(parentType)
+				location = previousTemplate.getChildLocation()
+				layer++
 			}
 
 			previousOperation = token.type
 		}
 	}
 
+	if(!root) {
+		console.log("invalid emmet")
+		process.exit(1)
+	}
+
 	return root
 }
 
-export class Template {
-	constructor({
-		name,
-		location,
-		type = 'default',
-		nextSibling = null,
-		child = null,
-		operation = null,
-		previous = null,
-		settings = null,
-	}) {
-		this.name = name
-		this.type = type
-		this.templateSrc = this.getMatchingTemplate(type, settings)
-		this.location = path.resolve(location)
-		this.child = child
-		this.nextSibling = nextSibling
-		this.replacements = null
-		this.operate(operation, previous, settings)
-	}
-
-	operate(operation, previous, settings) {
-		switch (operation) {
-			case 'sibling':
-				previous.nextSibling = this
-				this.location = previous.location
-				break
-			case 'child':
-				if (!previous) break
-				previous.child = this
-
-				this.location = previous.getChildLocation()
-				break
-			case 'up':
-				this.location = previous.location
-				previous.nextSibling = this
-				break
-			case 'empty':
-				if (previous && this.location !== previous.location) {
-					previous.child = this
-					this.location = previous.getChildLocation()
-				} else if (previous) {
-					previous.nextSibling = this
-				}
-
-				this.type = 'empty'
-				this.templateSrc = this.getMatchingTemplate('empty', settings)
-				break
-
-			default:
-				break
-		}
-	}
-
-	getMatchingTemplate(type, settings) {
-		const templatePath = settings.templatesSource
-		const templates = fs.readdirSync(templatePath)
-
-		if (!templates.includes(type)) {
-			console.error(`no template ${type} found in the emmet-gen-templates`)
-			process.exit(1)
-		}
-
-		const templateSrc = path.resolve(`${templatePath}/${type}`)
-		const srcDir = fs.readdirSync(templateSrc)
-
-		for (let i = 0; i < srcDir.length; i++) {
-			const template = srcDir[i]
-			if (!/__TemplateName__/g.test(template) || srcDir.length > 1) {
-				console.error(
-					`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`,
-				)
-				process.exit(1)
-			}
-		}
-
-		return templateSrc
-	}
-
-	getChildLocation() {
-		const templates = fs.readdirSync(this.templateSrc)
-
-		templates[0] = templates[0].replace(/__TemplateName__/g, this.name)
-		return path.resolve(`${this.location}/${templates[0]}`)
-	}
-
-	setClass(type, settings) {
-		this.templateSrc = this.getMatchingTemplate(type, settings)
-		this.type = type
-	}
-
-	setId(type, settings) {
-		this.templateSrc = this.getMatchingTemplate(type, settings)
-	}
-
-	setReplacements(attr) {
-		this.replacements = getReplacementMap(attr)
-	}
-}
-
-function replaceCountMarker(name, count, countLength) {
+function replaceCountMarker(name: string, count: number, countLength: number) {
 	let countName = String(count).padStart(countLength, '0')
 	return name.replace(/\$+/g, countName)
 }
 
-function linkGroup(root, groupLink, groupTemplate) {
+function linkGroup(root: Template, groupLink: GroupLinkType, groupTemplate: Template) {
+	if(groupLink.template === null) {
+		return root
+	}
+
 	if (groupLink.type === 'sibling') {
 		let next = groupLink.template
 		while (next.nextSibling) {
