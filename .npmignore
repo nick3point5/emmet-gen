@@ -2,8 +2,6 @@
 .husky/
 .eslintrc.json
 .prettierrc.json
-emmet-gen-templates.json
-emmet-gen-templates/
 assets/
 **/*.test.js
 **/*.test.js.map

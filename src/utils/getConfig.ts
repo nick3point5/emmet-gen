@@ -12,8 +12,6 @@ export function getConfig(isAbsolute?: boolean) {
 
 
 		if (previous === configLocation) {
-			console.log(previous)
-			console.log(configLocation)
 			console.error('no emmet-gen-templates.json found')
 			process.exit(1)
 		}
