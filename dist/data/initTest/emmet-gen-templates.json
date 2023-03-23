@@ -1,0 +1,6 @@
+{
+	"auto_imports": false,
+	"relative": true,
+	"templatesSource": "./emmet-gen-templates",
+	"baseUrl": "./"
+}
