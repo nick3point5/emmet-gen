@@ -159,7 +159,7 @@ npx emmet-gen index ./hello -r
 npx emmet-gen hello\>\(to\$+the\$+world\$\)\*5 -i
 ```
 
-* Index files with be generated without the flag by changing the emmet-gen-template.json by ```"auto_imports": true,```.
+* Index files with be generated without the flag by changing the emmet-gen-template.json by ```"auto_imports": true,```
 
 ### Init
 
