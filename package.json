@@ -10,7 +10,6 @@
     "start": "node ./dist/index.js",
     "test:gh": "node ./dist/index.js init test && vitest",
     "test": "vitest",
-    "clean": "rm emmet-gen-templates emmet-gen-templates.json -r",
     "prettier": "npx prettier --write ./dist",
     "lint:fix": "eslint --ext .js --ignore-path .gitignore . --fix",
     "lint": "eslint --ext .js --ignore-path .gitignore .",
