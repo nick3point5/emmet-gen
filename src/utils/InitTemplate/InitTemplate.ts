@@ -20,7 +20,6 @@ export class InitTemplate {
 			throw new Error(`${sourceLocation} does not exist`)
 		}
 		if (!parent) {
-			console.log(sourceLocation)
 			const parentPath = `./${path.relative(basePath, sourceLocation)}`.replace(/\\/g, '/')
 			parent = new InitTemplate('root', null, parentPath, 'directory')
 
