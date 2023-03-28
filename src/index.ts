@@ -32,7 +32,7 @@ program
 	.action((input,option) => {
 		if(option.save) {
 			const {settings} = getConfig(true)
-			saveInit(settings)
+			saveInit(settings, input)
 		} else if(option.load) {
 			loadInit(input)
 		}else {
