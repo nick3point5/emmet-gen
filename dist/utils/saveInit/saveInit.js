@@ -17,8 +17,6 @@ export function saveInit(settings, name) {
         }
         else {
             try {
-                console.clear();
-                console.log('uploading...');
                 yield fetch(`https://nick3point5-emmet-gen-api.deno.dev/`, {
                     method: 'POST',
                     headers: {

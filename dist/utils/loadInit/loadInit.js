@@ -8,19 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { InitTemplate } from '../InitTemplate/InitTemplate.js';
+import path from 'path';
+import fs from 'fs';
 export function loadInit(name) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const saveLocation = path.resolve(savePath)
-        // const template = fs.readFileSync(saveLocation, 'utf8')
         try {
-            console.clear();
-            console.log('loading...');
-            const result = yield fetch(`https://nick3point5-emmet-gen-api.deno.dev/${name}`);
-            const json = yield result.json();
-            const template = json.data;
+            let template;
+            if (!name) {
+                const saveLocation = path.resolve(process.cwd(), 'emmet-save.json');
+                template = fs.readFileSync(saveLocation, 'utf8');
+            }
+            else {
+                const result = yield fetch(`https://nick3point5-emmet-gen-api.deno.dev/${name}`);
+                const json = yield result.json();
+                template = json.data;
+            }
+            if (typeof template !== 'string') {
+                throw new Error('template is not a string');
+            }
             InitTemplate.createInit(process.cwd(), template);
-            console.clear();
-            console.log('loaded!');
         }
         catch (error) {
             console.log('something went wrong');
