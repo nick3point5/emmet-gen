@@ -53,7 +53,6 @@ program
 			else {
 				location = path.resolve(settingsLocation, '..', location)
 			}
-			console.log(path.resolve(location))
 			indexer(location, !!option.recursive)
 		})
 	})
