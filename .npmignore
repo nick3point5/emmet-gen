@@ -6,3 +6,5 @@ assets/
 **/*.test.js
 **/*.map
 src/
+emmet-gen-templates/
+emmet-gen-templates.json
