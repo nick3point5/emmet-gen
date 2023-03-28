@@ -54,7 +54,7 @@ export class InitTemplate {
             const location = path.resolve(destPath, (_a = current.location) !== null && _a !== void 0 ? _a : '');
             const content = current.content;
             if (current.type === 'directory') {
-                if (!fs.existsSync(location) && current.name !== '') {
+                if (!fs.existsSync(location)) {
                     fs.mkdirSync(location);
                 }
                 for (let i = 0; i < current.children.length; i++) {

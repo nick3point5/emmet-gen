@@ -5,8 +5,6 @@ import fs from "fs";
 
 export function saveInit(settings: typeof ConfigType) {
 	const template = InitTemplate.encodeInit(settings.baseUrl,settings.templatesSource)
-	// fs.writeFileSync(settings.baseUrl+'/save.json', template!, 'utf8')
-
-	
+	fs.writeFileSync(settings.baseUrl+'/save.json', template!, 'utf8')
 }
 

@@ -11,6 +11,7 @@ import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 import { indexer } from './utils/indexer/indexer.js'
 import { saveInit } from './utils/saveInit/saveInit.js'
+import { loadInit } from './utils/loadInit/loadInit.js'
 
 const pkgLocation = new URL('../package.json', import.meta.url)
 const pkg = JSON.parse(fs.readFileSync(pkgLocation).toString())
@@ -32,6 +33,8 @@ program
 		if(option.save) {
 			const {settings} = getConfig(true)
 			saveInit(settings)
+		} else if(option.load) {
+			loadInit(input)
 		}else {
 			generateInit(input)
 		}

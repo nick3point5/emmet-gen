@@ -10,6 +10,7 @@ import { parseTokens } from './utils/parseTokens/parseTokens.js';
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js';
 import { indexer } from './utils/indexer/indexer.js';
 import { saveInit } from './utils/saveInit/saveInit.js';
+import { loadInit } from './utils/loadInit/loadInit.js';
 const pkgLocation = new URL('../package.json', import.meta.url);
 const pkg = JSON.parse(fs.readFileSync(pkgLocation).toString());
 const { version, description } = pkg;
@@ -19,15 +20,19 @@ program.version(version).description(description);
 program
     .command('init')
     .option('-s, --save', 'save emmet templates and json')
+    .option('-l, --load', 'loads from json')
     .description('Generate the initial files for emmet-gen')
-    .argument('[type]')
-    .action((type, option) => {
+    .argument('[input]')
+    .action((input, option) => {
     if (option.save) {
         const { settings } = getConfig(true);
         saveInit(settings);
     }
+    else if (option.load) {
+        loadInit(input);
+    }
     else {
-        generateInit(type);
+        generateInit(input);
     }
 });
 program.command('config').action(() => {

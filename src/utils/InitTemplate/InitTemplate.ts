@@ -22,7 +22,7 @@ export class InitTemplate {
 		if (!parent) {
 			console.log(sourceLocation)
 			const parentPath = `./${path.relative(basePath, sourceLocation)}`.replace(/\\/g, '/')
-			parent = new InitTemplate('', null, parentPath, 'directory')
+			parent = new InitTemplate('root', null, parentPath, 'directory')
 
 			const jsonLocation = path.resolve(basePath,'emmet-gen-templates.json')
 			const jsonPath = `./${path.relative(basePath, jsonLocation)}`.replace(/\\/g, '/')
@@ -69,8 +69,8 @@ export class InitTemplate {
 			const location = path.resolve(destPath, current.location ?? '')
 			const content = current.content
 			if (current.type === 'directory') {
-				if (!fs.existsSync(location) && current.name !== '') {
-					fs.mkdirSync(location)
+				if (!fs.existsSync(location)) {
+					fs.mkdirSync(location, { recursive: true })
 				}
 				for (let i = 0; i < current.children.length; i++) {
 					queue.push(current.children[i])
