@@ -1,4 +1,4 @@
-import type ConfigType from '../../data/init/emmet-gen-templates.json'
+import type ConfigType from '../../data/emmet-gen-templates.json'
 import type { EmmetToken } from '../EmmetToken/EmmetToken.js'
 import { Template } from '../Template/Template.js'
 
@@ -74,7 +74,7 @@ export function parseTokens(
 				? token.value
 				: replaceCountMarker(token.value, groupCount, groupCountLength)
 
-			let template: Template = new Template({
+			const template: Template = new Template({
 				name,
 				location,
 				operation,

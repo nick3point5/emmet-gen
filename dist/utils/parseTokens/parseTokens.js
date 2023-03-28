@@ -53,7 +53,7 @@ export function parseTokens(emmetTokens, settings, rootSrc = '', groupCountLengt
 			const name = !groupCount
 				? token.value
 				: replaceCountMarker(token.value, groupCount, groupCountLength)
-			let template = new Template({
+			const template = new Template({
 				name,
 				location,
 				operation,

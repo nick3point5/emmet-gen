@@ -1,3 +1,5 @@
 node_modules/
 .husky/
 testing/
+emmet-gen-templates/
+emmet-gen-templates.json
