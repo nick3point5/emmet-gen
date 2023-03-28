@@ -177,14 +177,15 @@ npx emmet-gen init -l
 ```
 
 * Emmet-gen also supports remote cloud saving and loading as well.
-* Adding a name after the save flag will upload the templates. Note: Every template uploaded is unique and uploading with the same name will overwrite the previous template.
+* Adding a name after the save flag will upload the templates.
+<b>NOTE: Every template name uploaded is unique and uploading with the same name will overwrite the previous template.</b>
 
 ```shell
-npx emmet-gen init -s nick3point5/example
+npx emmet-gen init -s nick3point5-example
 ```
 
 * Similarly loading from the cloud will be done if a name is provided.
 
 ```shell
-npx emmet-gen init -l nick3point5/example
+npx emmet-gen init -l nick3point5-example
 ```
