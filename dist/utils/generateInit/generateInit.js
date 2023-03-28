@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { InitTemplate } from './InitTemplate/InitTemplate.js';
+import { InitTemplate } from '../InitTemplate/InitTemplate.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export function generateInit(type) {

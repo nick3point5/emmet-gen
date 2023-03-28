@@ -24,8 +24,8 @@ jobs:
         run: npm run lint:fix
       - name: Test
         run: npm run test:gh --if-present
-      # - name: Build
-      #   run: npm run build
+      - name: Clean up tests
+        run: npm run clean
       - name: Publish package on NPM 📦
         run: npm publish --access public
         env:

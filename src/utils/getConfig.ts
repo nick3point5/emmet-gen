@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type ConfigType from '../data/init/emmet-gen-templates.json'
+import type ConfigType from '../data/emmet-gen-templates.json'
 
 export function getConfig(isAbsolute?: boolean) {
 	let configLocation = `${process.cwd()}/emmet-gen-templates.json`
