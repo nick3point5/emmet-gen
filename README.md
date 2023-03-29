@@ -25,7 +25,7 @@ Emmet
 
 ## Installation
 
-* Download and install [Node.js](https://nodejs.org/en/download/). Node.js 14 or higher is required.
+* Download and install [Node.js](https://nodejs.org/en/download/).
 * Before emmet-gen can be used, it should be initialized with the command
 
 ```shell
