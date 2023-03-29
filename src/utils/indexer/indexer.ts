@@ -23,7 +23,7 @@ export function indexer(source: fs.PathLike, recursive = false, isTypeScript = f
 		const item = items[i]
 		const itemStat = fs.statSync(`${source}/${item}`)
 
-		if (itemStat.isFile()) {
+		if (itemStat.isFile() && regexExtensions.test(filename)) {
 			files.push(item)
 		} else if (itemStat.isDirectory()) {
 			directories.push(item)
@@ -32,17 +32,15 @@ export function indexer(source: fs.PathLike, recursive = false, isTypeScript = f
 
 	for (let i = 0; i < files.length; i++) {
 		const filename = files[i]
-		if (regexExtensions.test(filename)) {
-			const nameNoExtension = filename.replace(regexExtensions, '')
-			text += `export { ${nameNoExtension} } from './${nameNoExtension}'\n`
+		const nameNoExtension = filename.replace(regexExtensions, '')
+		text += `export { ${nameNoExtension} } from './${nameNoExtension}'\n`
 
-			if (/(\.tsx|\.ts)$/m.test(filename)) {
-				isTypeScript = true
-			}
+		if (/(\.tsx|\.ts)$/m.test(filename)) {
+			isTypeScript = true
 		}
 	}
 
-	if (files.length > 0) {
+	if (files.length > 0 && directories.length > 0) {
 		text += '\n'
 	}
 
