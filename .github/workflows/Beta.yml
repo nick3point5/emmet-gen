@@ -18,10 +18,10 @@ jobs:
           node-version: 18.x
           registry-url: https://registry.npmjs.org
       - name: Install dependencies
-        run: npx ci
+        run: pnpm install
       - name: Build
-        run: npm run build
+        run: pnpm build
       - name: Lint
-        run: npm run lint:fix
+        run: pnpm lint:fix
       - name: Test
-        run: npm run test:gh --if-present
+        run: pnpm test:gh --if-present
