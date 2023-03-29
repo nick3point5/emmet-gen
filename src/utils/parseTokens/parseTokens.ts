@@ -17,8 +17,8 @@ export function parseTokens(
 	let location = rootSrc || settings.baseUrl
 	let previousTemplate = null
 	let previousOperation = ''
-	let parentStack: Template[] = []
-	let parentTypeStack = ['default']
+	const parentStack: Template[] = []
+	const parentTypeStack = ['default']
 	let root = null
 	let operation = ''
 	let parentType = 'default'
@@ -171,7 +171,7 @@ export function parseTokens(
 					for (let i = multiplyStart; i < n; i++) {
 						const name = replaceCountMarker(countName, i + 1, countLength)
 
-						let template: Template = new Template({
+						const template: Template = new Template({
 							name,
 							location,
 							operation: 'sibling',
@@ -228,7 +228,7 @@ export function parseTokens(
 	}
 
 	if(!root) {
-		console.log("invalid emmet")
+		console.log('invalid emmet')
 		process.exit(1)
 	}
 
@@ -236,7 +236,7 @@ export function parseTokens(
 }
 
 function replaceCountMarker(name: string, count: number, countLength: number) {
-	let countName = String(count).padStart(countLength, '0')
+	const countName = String(count).padStart(countLength, '0')
 	return name.replace(/\$+/g, countName)
 }
 
