@@ -12,17 +12,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.3.0
       - name: Setup Node.js
-        uses: pnpm/action-setup@v2
+        uses: actions/setup-node@v3.6.0
         with:
-          version: 6.0.2
+          node-version: 18.x
+          registry-url: https://registry.npmjs.org
       - name: Install dependencies
-        run: pnpm install
+        run: npx ci
       - name: Build
-        run: pnpm build
+        run: npm run build
       - name: Lint
-        run: pnpm lint:fix
+        run: npm run lint:fix
       - name: Test
-        run: pnpm test:gh --if-present
+        run: npm run test:gh --if-present
       - name: Publish package on NPM 📦
         run: npm publish --access public --no-git-checks
         env:
