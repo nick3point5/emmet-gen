@@ -116,6 +116,7 @@ export function parseTokens(
 				const match = previousTemplate?.name.match(/\$+/g)
 				if (!match) {
 					console.error('root template must have "$" in name')
+					process.exit(1)
 				}
 
 				const countLength = match[0].length
