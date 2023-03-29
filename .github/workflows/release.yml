@@ -1,3 +1,4 @@
+
 name: Release
 on:
   push:
@@ -25,7 +26,7 @@ jobs:
       - name: Test
         run: npm run test:gh --if-present
       - name: Publish package on NPM 📦
-        run: npm publish --access public --no-git-checks
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
