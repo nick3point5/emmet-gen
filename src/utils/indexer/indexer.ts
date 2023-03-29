@@ -33,6 +33,9 @@ export function indexer(source: fs.PathLike, recursive = false, isTypeScript = f
 	for (let i = 0; i < files.length; i++) {
 		const filename = files[i]
 		const nameNoExtension = filename.replace(regexExtensions, '')
+		if(nameNoExtension === 'index'){
+			continue
+		}
 		text += `export { ${nameNoExtension} } from './${nameNoExtension}'\n`
 
 		if (/(\.tsx|\.ts)$/m.test(filename)) {
