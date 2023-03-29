@@ -23,7 +23,7 @@ export function indexer(source: fs.PathLike, recursive = false, isTypeScript = f
 		const item = items[i]
 		const itemStat = fs.statSync(`${source}/${item}`)
 
-		if (itemStat.isFile() && regexExtensions.test(filename)) {
+		if (itemStat.isFile() && regexExtensions.test(item)) {
 			files.push(item)
 		} else if (itemStat.isDirectory()) {
 			directories.push(item)
