@@ -1,4 +1,5 @@
-name: Release
+name: Beta-Release
+
 on:
   push:
     branches: [beta]
