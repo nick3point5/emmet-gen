@@ -15,7 +15,7 @@ type TemplateInput = {
 }
 
 export class Template {
-	name: any
+	name: string
 	type: string
 	templateSrc: string
 	location: string

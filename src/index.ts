@@ -29,13 +29,13 @@ program
 	.option('-l, --load', 'loads from json')
 	.description('Generate the initial files for emmet-gen')
 	.argument('[input]')
-	.action((input,option) => {
-		if(option.save) {
-			const {settings} = getConfig(true)
+	.action((input, option) => {
+		if (option.save) {
+			const { settings } = getConfig(true)
 			saveInit(settings, input)
-		} else if(option.load) {
+		} else if (option.load) {
 			loadInit(input)
-		}else {
+		} else {
 			generateInit(input)
 		}
 	})
@@ -50,31 +50,30 @@ program
 	.argument('<location...>')
 	.option('-r, --recursive', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
-	.action((locations:string[],option) => {
-		const {settings, settingsLocation} = getConfig()
-		locations.forEach(location => {
-			if(settings.relative && !option.absolute) {
-				location = path.resolve(process.cwd(),settings.baseUrl,location)
+	.action((locations: string[], option) => {
+		const { settings, settingsLocation } = getConfig()
+		locations.forEach((location) => {
+			if (settings.relative && !option.absolute) {
+				location = path.resolve(process.cwd(), settings.baseUrl, location)
 			} else {
-				location = path.resolve(settingsLocation,'..',location)
+				location = path.resolve(settingsLocation, '..', location)
 			}
 			indexer(location, !!option.recursive)
 		})
-
 	})
 
 program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
-	.action((input,option) => {
-		const {settings} = getConfig(!!option.absolute)
+	.action((input, option) => {
+		const { settings } = getConfig(!!option.absolute)
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens, settings)
 		generateTemplate(rootTemplate)
 
-		if(!!option.index || !!settings.auto_imports) {
+		if (!!option.index || !!settings.auto_imports) {
 			indexer(rootTemplate.getChildLocation(), true)
 		}
 

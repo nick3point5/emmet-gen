@@ -48,7 +48,7 @@ function createTemplate(source:string, destination:string, template: Template) {
 
 	for (let i = 0; i < directories.length; i++) {
 		const srcDir = path.resolve(`${source}/${directories[i]}`)
-		let destDir = path
+		const destDir = path
 			.resolve(`${destination}/${directories[i]}`)
 			.replace(/__TemplateName__/g, template.name)
 

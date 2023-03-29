@@ -8,3 +8,4 @@ assets/
 src/
 emmet-gen-templates/
 emmet-gen-templates.json
+tsconfig.json

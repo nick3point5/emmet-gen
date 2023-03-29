@@ -3,3 +3,4 @@ node_modules/
 testing/
 emmet-gen-templates/
 emmet-gen-templates.json
+dist/
