@@ -10,8 +10,8 @@ export class Settings {
 	public static location: string
 	private static self: Settings
 
-	private constructor() {
-		const { settings, settingsLocation } = Settings.getConfig()
+	private constructor(isAbsolute?: boolean) {
+		const { settings, settingsLocation } = Settings.getConfig(isAbsolute)
 		Settings.auto_imports = settings.auto_imports
 		Settings.relative = settings.relative
 		Settings.templatesSource = settings.templatesSource
@@ -19,9 +19,9 @@ export class Settings {
 		Settings.location = settingsLocation
 	}
 
-	public static init() {
+	public static init(isAbsolute?: boolean) {
 		if(Settings.self) return Settings.self
-		Settings.self = new Settings()
+		Settings.self = new Settings(isAbsolute)
 		return Settings.self
 	}
 

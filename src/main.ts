@@ -52,12 +52,12 @@ program
 	.option('-r, --recursive', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
 	.action((locations: string[], option) => {
-		const { settings, settingsLocation } = getConfig()
+		Settings.init()
 		locations.forEach((location) => {
-			if (settings.relative && !option.absolute) {
-				location = path.resolve(process.cwd(), settings.baseUrl, location)
+			if (Settings.relative && !option.absolute) {
+				location = path.resolve(process.cwd(), Settings.baseUrl, location)
 			} else {
-				location = path.resolve(settingsLocation, '..', location)
+				location = path.resolve(Settings.location, '..', location)
 			}
 			indexer(location, !!option.recursive)
 		})
@@ -68,13 +68,13 @@ program
 	.option('-i, --index', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
 	.action((input, option) => {
-		const { settings } = getConfig(!!option.absolute)
+		Settings.init(!!option.absolute)
 		const emmetStrings = parseString(input)
 		const emmetTokens = parseEmmet(emmetStrings)
-		const rootTemplate = parseTokens(emmetTokens, settings)
+		const rootTemplate = parseTokens(emmetTokens)
 		generateTemplate(rootTemplate)
 
-		if (!!option.index || !!settings.auto_imports) {
+		if (!!option.index || !!Settings.auto_imports) {
 			indexer(rootTemplate.getChildLocation(), true)
 		}
 
