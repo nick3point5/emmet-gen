@@ -1,12 +1,12 @@
 import { InitTemplate } from '../InitTemplate/InitTemplate.js'
-import type ConfigType from '../../data/emmet-gen-templates.json'
 import fs from 'fs'
+import { Settings } from '../Settings/Settings.js'
 
-export async function saveInit(settings: typeof ConfigType, name?: string) {
-	const template = InitTemplate.encodeInit(settings.baseUrl,settings.templatesSource)
+export async function saveInit(name?: string) {
+	const template = InitTemplate.encodeInit(Settings.baseUrl,Settings.templatesSource)
 
 	if(!name) {
-		fs.writeFileSync(settings.baseUrl+'/emmet-save.json', template!, 'utf8')
+		fs.writeFileSync(Settings.baseUrl+'/emmet-save.json', template!, 'utf8')
 	}else {
 		try {
 			await fetch('https://nick3point5-emmet-gen-api.deno.dev/', {

@@ -2,13 +2,13 @@
   "name": "emmet-gen",
   "version": "1.5.8",
   "description": "emmet-gen is a CLI tool for generating directories and files with emmet inspired syntax.",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "type": "module",
   "scripts": {
     "precommit": "",
     "prepare": "husky install",
-    "start": "node ./dist/index.js",
-    "test:gh": "node ./dist/index.js init test && vitest",
+    "start": "node ./dist/main.js",
+    "test:gh": "node ./dist/main.js init test && vitest",
     "test": "vitest",
     "prettier": "npx prettier --write ./dist",
     "lint:fix": "eslint --ext .ts --ignore-path .gitignore . --fix",
@@ -60,5 +60,5 @@
       "pre-commit": "if branch is dev; then npm run precommit:minor;"
     }
   },
-  "bin": "./dist/index.js"
+  "bin": "./dist/main.js"
 }

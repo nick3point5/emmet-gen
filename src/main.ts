@@ -5,13 +5,13 @@ import path from 'path'
 import { Command } from 'commander'
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
 import { generateInit } from './utils/generateInit/generateInit.js'
-import { getConfig } from './utils/getConfig.js'
 import { parseString } from './utils/parseString/parseString.js'
 import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 import { indexer } from './utils/indexer/indexer.js'
 import { saveInit } from './utils/saveInit/saveInit.js'
 import { loadInit } from './utils/loadInit/loadInit.js'
+import { Settings } from './utils/Settings/Settings.js'
 
 const pkgLocation = new URL('../package.json', import.meta.url)
 const pkg = JSON.parse(fs.readFileSync(pkgLocation).toString())
@@ -31,8 +31,8 @@ program
 	.argument('[input]')
 	.action((input, option) => {
 		if (option.save) {
-			const { settings } = getConfig(true)
-			saveInit(settings, input)
+			Settings.init()
+			saveInit(input)
 		} else if (option.load) {
 			loadInit(input)
 		} else {
@@ -41,7 +41,8 @@ program
 	})
 
 program.command('config').action(() => {
-	console.log(getConfig())
+	Settings.init()
+	console.log(Settings)
 })
 
 program

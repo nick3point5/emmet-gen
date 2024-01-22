@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import type ConfigType from '../../data/emmet-gen-templates.json'
 import { getReplacementMap } from '../getReplacementMap.js'
+import { Settings } from '../Settings/Settings.js'
 
 type TemplateInput = {
 	name: string
@@ -11,7 +11,6 @@ type TemplateInput = {
 	child?: Template | null
 	operation?: string
 	previous?: Template | null
-	settings: typeof ConfigType
 }
 
 export class Template {
@@ -30,19 +29,18 @@ export class Template {
 		child = null,
 		operation = '',
 		previous = null,
-		settings,
 	}: TemplateInput) {
 		this.name = name
 		this.type = type
-		this.templateSrc = this.getMatchingTemplate(type, settings)
+		this.templateSrc = this.getMatchingTemplate(type)
 		this.location = path.resolve(location)
 		this.child = child
 		this.nextSibling = nextSibling
 		this.replacements = null
-		this.operate(operation, previous, settings)
+		this.operate(operation, previous)
 	}
 
-	operate(operation: string, previous: Template | null, settings: typeof ConfigType) {
+	operate(operation: string, previous: Template | null) {
 		switch (operation) {
 			case 'sibling':
 				if (!previous) break
@@ -62,7 +60,7 @@ export class Template {
 				break
 			case 'empty':
 				this.type = 'empty'
-				this.templateSrc = this.getMatchingTemplate('empty', settings)
+				this.templateSrc = this.getMatchingTemplate('empty')
 
 				if (!previous) break
 
@@ -79,8 +77,8 @@ export class Template {
 		}
 	}
 
-	getMatchingTemplate(type: string, settings: typeof ConfigType) {
-		const templatePath = settings.templatesSource
+	getMatchingTemplate(type: string) {
+		const templatePath = Settings.templatesSource
 		const templates = fs.readdirSync(templatePath)
 
 		if (!templates.includes(type)) {
@@ -111,13 +109,13 @@ export class Template {
 		return path.resolve(`${this.location}/${templates[0]}`)
 	}
 
-	setClass(type: string, settings: typeof ConfigType) {
-		this.templateSrc = this.getMatchingTemplate(type, settings)
+	setClass(type: string) {
+		this.templateSrc = this.getMatchingTemplate(type)
 		this.type = type
 	}
 
-	setId(type: string, settings: typeof ConfigType) {
-		this.templateSrc = this.getMatchingTemplate(type, settings)
+	setId(type: string) {
+		this.templateSrc = this.getMatchingTemplate(type)
 	}
 
 	setReplacements(attr: string) {

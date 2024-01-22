@@ -1,5 +1,5 @@
-import type ConfigType from '../../data/emmet-gen-templates.json'
 import type { EmmetToken } from '../EmmetToken/EmmetToken.js'
+import { Settings } from '../Settings/Settings'
 import { Template } from '../Template/Template.js'
 
 type GroupLinkType = {
@@ -9,12 +9,11 @@ type GroupLinkType = {
 
 export function parseTokens(
 	emmetTokens: EmmetToken[],
-	settings: typeof ConfigType,
 	rootSrc = '',
 	groupCountLength = 0,
 	groupCount = 0,
 ) {
-	let location = rootSrc || settings.baseUrl
+	let location = rootSrc || Settings.baseUrl
 	let previousTemplate = null
 	let previousOperation = ''
 	const parentStack: Template[] = []
@@ -51,13 +50,13 @@ export function parseTokens(
 					previousTemplate.type = token.value
 					continue
 				}
-				previousTemplate.setClass(token.value, settings)
+				previousTemplate.setClass(token.value)
 				operation = ''
 				continue
 			}
 
 			if (operation === 'id') {
-				previousTemplate?.setId(token.value, settings)
+				previousTemplate?.setId(token.value)
 				operation = ''
 				continue
 			}
@@ -80,7 +79,6 @@ export function parseTokens(
 				operation,
 				previous: previousTemplate,
 				type,
-				settings,
 			})
 
 			operation = ''
@@ -153,7 +151,7 @@ export function parseTokens(
 					}
 
 					for (let i = multiplyStart - 1; i < n; i++) {
-						groupTemplate = parseTokens(captureTokens, settings, groupSrc, 1, i + 1)
+						groupTemplate = parseTokens(captureTokens, groupSrc, 1, i + 1)
 						root = linkGroup(root, groupLink, groupTemplate)
 						groupLink.template = groupTemplate
 						groupLink.type = 'sibling'
@@ -178,7 +176,6 @@ export function parseTokens(
 							operation: 'sibling',
 							previous: previousTemplate,
 							type: previousTemplate.type,
-							settings,
 						})
 
 						template.replacements = replacementMap
