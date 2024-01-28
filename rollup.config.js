@@ -6,7 +6,7 @@ export default {
 		{
 			file: './dist/main.min.js',
 			format: 'es',
-			plugins: [terser()]
+			plugins: [terser({compress: {unsafe: true}})]
 		}
 	]
 }
