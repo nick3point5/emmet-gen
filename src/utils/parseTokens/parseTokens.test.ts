@@ -1,7 +1,7 @@
 import { expect } from 'vitest'
 import { test, describe } from 'vitest'
 import { parseTokens } from './parseTokens.js'
-import { parseString } from '../parseString/parseString.js'
+import { emmetLexer } from '../emmetLexer/emmetLexer.js'
 import { parseEmmet } from '../parseEmmet/parseEmmet.js'
 import { Settings } from '../Settings/Settings.js'
 import { Template } from '../Template/Template.js'
@@ -11,7 +11,7 @@ Settings.init()
 describe('should parse tokens', () => {
 	test('name', () => {
 		const string = 'hello'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -26,7 +26,7 @@ describe('should parse tokens', () => {
 	})
 	test('siblings', () => {
 		const string = 'hello+world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -51,7 +51,7 @@ describe('should parse tokens', () => {
 	})
 	test('child', () => {
 		const string = 'hello>world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -76,7 +76,7 @@ describe('should parse tokens', () => {
 	})
 	test('up', () => {
 		const string = 'hello>world^mister'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -110,7 +110,7 @@ describe('should parse tokens', () => {
 	})
 	test('empty', () => {
 		const string = '/hello'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -125,7 +125,7 @@ describe('should parse tokens', () => {
 	})
 	test('empty chaining', () => {
 		const string = '/hello/world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -150,7 +150,7 @@ describe('should parse tokens', () => {
 	})
 	test('multiply', () => {
 		const string = 'hello$*10'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -180,7 +180,7 @@ describe('should parse tokens', () => {
 	})
 	test('multiplyStart', () => {
 		const string = 'hello$@5*10'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -210,7 +210,7 @@ describe('should parse tokens', () => {
 	})
 	test('Group', () => {
 		const string = '(hello$+world$)*5'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -249,7 +249,7 @@ describe('should parse tokens', () => {
 	})
 	test('attr', () => {
 		const string = 'hello[world="yes"]'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -268,7 +268,7 @@ describe('should parse tokens', () => {
 	})
 	test('attr*5', () => {
 		const string = 'hello$[world="yes"]*5'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -301,7 +301,7 @@ describe('should parse tokens', () => {
 	})
 	test('empty should not apply to children', () => {
 		const string = '/hello>world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -326,7 +326,7 @@ describe('should parse tokens', () => {
 	})
 	test('class should change type', () => {
 		const string = 'hello.test'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -341,7 +341,7 @@ describe('should parse tokens', () => {
 	})
 	test('root class should apply to all', () => {
 		const string = 'hello.test>world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -366,7 +366,7 @@ describe('should parse tokens', () => {
 	})
 	test('id should change type', () => {
 		const string = 'test#test'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -381,7 +381,7 @@ describe('should parse tokens', () => {
 	})
 	test('root class should apply to all', () => {
 		const string = 'hello.test>world#default>thing'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 		const hello = new Template({
@@ -414,7 +414,7 @@ describe('should parse tokens', () => {
 	})
 	test('grouping children', () => {
 		const string = 'hello>(to$+the$+world$)*3'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -465,7 +465,7 @@ describe('should parse tokens', () => {
 describe('should parse examples', () => {
 	test('Child: >', () => {
 		const string = 'hello>world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -490,7 +490,7 @@ describe('should parse examples', () => {
 	})
 	test('Sibling: +', () => {
 		const string = 'hello+world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -515,7 +515,7 @@ describe('should parse examples', () => {
 	})
 	test('Climb-up: ^', () => {
 		const string = 'hello>to+the^world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -558,7 +558,7 @@ describe('should parse examples', () => {
 	})
 	test('Multiplication: *', () => {
 		const string = 'hello>world$*5'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -589,7 +589,7 @@ describe('should parse examples', () => {
 	})
 	test('ID: #', () => {
 		const string = 'hello>world#file'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -614,7 +614,7 @@ describe('should parse examples', () => {
 	})
 	test('CLASS: .', () => {
 		const string = 'hello.file'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -629,7 +629,7 @@ describe('should parse examples', () => {
 	})
 	test('Replace Contents: ', () => {
 		const string = 'hello[log="error"]'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -648,7 +648,7 @@ describe('should parse examples', () => {
 	})
 	test('empty: /', () => {
 		const string = '/hello/world'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 
@@ -673,7 +673,7 @@ describe('should parse examples', () => {
 	})
 	test('Grouping: ()', () => {
 		const string = 'hello>(to$+the$+world$)*5'
-		const emmetString = parseString(string)
+		const emmetString = emmetLexer(string)
 		const emmetToken = parseEmmet(emmetString)
 		const root = parseTokens(emmetToken)
 

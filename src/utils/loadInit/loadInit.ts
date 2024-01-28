@@ -22,6 +22,4 @@ export async function loadInit(name: string) {
 	} catch (error) {
 		console.log('something went wrong')
 	}
-
-	// InitTemplate.createInit(process.cwd(), template)
 }

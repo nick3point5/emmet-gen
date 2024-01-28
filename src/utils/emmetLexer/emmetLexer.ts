@@ -1,4 +1,4 @@
-export function parseString(string: string) {
+export function emmetLexer(string: string) {
 	const regexArray: string[] = []
 
 	const regexMatches = new Map<string, string>([
