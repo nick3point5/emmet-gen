@@ -13,6 +13,7 @@
     "prettier": "npx prettier --write ./dist",
     "lint:fix": "eslint --ext .ts --ignore-path .gitignore . --fix",
     "lint": "eslint --ext .ts --ignore-path .gitignore .",
+    "rollup": "rollup --config",
     "build": "npx tsc"
   },
   "keywords": [
@@ -32,6 +33,7 @@
   "author": "nick3point5",
   "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
@@ -40,6 +42,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "husky": "^8.0.3",
+    "rollup": "^4.9.6",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
     "vitest": "^1.2.1"

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "build",
 		"lib": ["ESNext", "dom"],
     "strict": true,
     "target": "es6",

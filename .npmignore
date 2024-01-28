@@ -6,6 +6,7 @@ assets/
 **/*.test.js
 **/*.map
 src/
+build/
 emmet-gen-templates/
 emmet-gen-templates.json
 tsconfig.json
