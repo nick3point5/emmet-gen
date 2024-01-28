@@ -8,7 +8,14 @@
     "module": "ESNext",
     "sourceMap": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true
-  }
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+  },
+  "exclude": [
+    "node_modules/",
+    "vitest.config.ts",
+		"emmet-gen-templates/",
+    "typings/browser",
+    "typings/browser.d.ts"
+  ]
 }

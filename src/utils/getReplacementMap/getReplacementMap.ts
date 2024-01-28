@@ -8,7 +8,7 @@ export function getReplacementMap(string:string) {
 
 
 	if (!keys || !values || keys.length !== values.length) {
-		console.log('The attr property is not properly formatted.')
+		console.error('The attr property is not properly formatted.')
 
 		process.exit(1)
 	}

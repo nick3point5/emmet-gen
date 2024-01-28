@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { getReplacementMap } from '../getReplacementMap.js'
+import { getReplacementMap } from '../getReplacementMap/getReplacementMap.js'
 import { Settings } from '../Settings/Settings.js'
 
 type TemplateInput = {
