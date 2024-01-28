@@ -1,6 +1,6 @@
-import { Settings } from '../Settings/Settings';
-import { Template } from '../Template/Template';
-import { parseToken } from './parseToken/parseToken';
+import { Settings } from '../Settings/Settings.js';
+import { Template } from '../Template/Template.js';
+import { parseToken } from './parseToken/parseToken.js';
 export function parseTokens(emmetTokens, groupCount = 0) {
     const root = new Template({
         name: 'root',

@@ -1,5 +1,5 @@
-import { Template } from '../../../Template/Template'
-import { State } from '../../parseTokens'
+import { Template } from '../../../Template/Template.js'
+import { State } from '../../parseTokens.js'
 
 export function emptyInstruction() {
 	return (state: State) => {

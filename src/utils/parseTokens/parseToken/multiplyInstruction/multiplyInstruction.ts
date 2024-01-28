@@ -1,7 +1,7 @@
-import { EmmetToken } from '../../../EmmetToken/EmmetToken'
-import { Template } from '../../../Template/Template'
-import { State, parseTokens } from '../../parseTokens'
-import { replaceCountMarker } from '../../replaceCountMarker/replaceCountMarker'
+import { EmmetToken } from '../../../EmmetToken/EmmetToken.js'
+import { Template } from '../../../Template/Template.js'
+import { State, parseTokens } from '../../parseTokens.js'
+import { replaceCountMarker } from '../../replaceCountMarker/replaceCountMarker.js'
 
 export function multiplyInstruction( token: EmmetToken ) {
 	const n = Number(token.value)

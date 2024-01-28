@@ -1,6 +1,6 @@
-import { EmmetToken } from '../../../EmmetToken/EmmetToken'
-import { State } from '../../parseTokens'
-import { replaceCountMarker } from '../../replaceCountMarker/replaceCountMarker'
+import { EmmetToken } from '../../../EmmetToken/EmmetToken.js'
+import { State } from '../../parseTokens.js'
+import { replaceCountMarker } from '../../replaceCountMarker/replaceCountMarker.js'
 
 export function nameInstruction(token: EmmetToken) {
 	return (state: State) => {

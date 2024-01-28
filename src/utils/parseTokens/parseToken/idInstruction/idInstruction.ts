@@ -1,4 +1,4 @@
-import { State } from '../../parseTokens'
+import { State } from '../../parseTokens.js'
 
 export function idInstruction() {
 	return (state: State) => {

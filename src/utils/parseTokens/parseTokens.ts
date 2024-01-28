@@ -1,7 +1,7 @@
-import { EmmetToken } from '../EmmetToken/EmmetToken'
-import { Settings } from '../Settings/Settings'
-import { Template } from '../Template/Template'
-import { parseToken } from './parseToken/parseToken'
+import { EmmetToken } from '../EmmetToken/EmmetToken.js'
+import { Settings } from '../Settings/Settings.js'
+import { Template } from '../Template/Template.js'
+import { parseToken } from './parseToken/parseToken.js'
 
 export type GroupState = {
 	template: Template
