@@ -4,7 +4,7 @@ export default {
 	input: './build/main.js',
 	output: [
 		{
-			file: './dist/bundle.min.js',
+			file: './dist/main.min.js',
 			format: 'es',
 			plugins: [terser()]
 		}
