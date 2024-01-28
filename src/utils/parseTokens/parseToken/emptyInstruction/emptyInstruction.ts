@@ -1,4 +1,5 @@
-import { State, Template } from '../../parseTokens2'
+import { Template } from '../../../Template/Template'
+import { State } from '../../parseTokens'
 
 export function emptyInstruction() {
 	return (state: State) => {
@@ -9,6 +10,7 @@ export function emptyInstruction() {
 				name: '',
 				location: location,
 				type: 'empty',
+				className: template.className,
 				previous: template,
 			})
 

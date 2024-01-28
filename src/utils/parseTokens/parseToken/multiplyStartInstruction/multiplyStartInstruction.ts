@@ -1,5 +1,5 @@
 import { EmmetToken } from '../../../EmmetToken/EmmetToken'
-import { State } from '../../parseTokens2'
+import { State } from '../../parseTokens'
 
 export function multiplyStartInstruction(token: EmmetToken) {
 	return (state: State) => {

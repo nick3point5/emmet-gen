@@ -75,7 +75,7 @@ program
 		generateTemplate(rootTemplate)
 
 		if (!!option.index || !!Settings.auto_imports) {
-			indexer(rootTemplate.getChildLocation(), true)
+			indexer(rootTemplate.location, true)
 		}
 
 		console.log('Done 📂')

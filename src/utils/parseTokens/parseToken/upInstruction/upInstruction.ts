@@ -1,4 +1,5 @@
-import { State, Template } from '../../parseTokens2'
+import { Template } from '../../../Template/Template'
+import { State } from '../../parseTokens'
 
 export function upInstruction() {
 	return (state: State) => {

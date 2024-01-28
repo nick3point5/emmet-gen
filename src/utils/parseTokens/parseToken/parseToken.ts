@@ -1,5 +1,5 @@
 import { EmmetToken } from '../../EmmetToken/EmmetToken'
-import { State } from '../parseTokens2'
+import { State } from '../parseTokens'
 import { nameInstruction } from './nameInstruction/nameInstruction.js'
 import { siblingInstruction } from './siblingInstruction/siblingInstruction.js'
 import { childInstruction } from './childInstruction/childInstruction.js'

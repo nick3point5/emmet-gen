@@ -1,5 +1,6 @@
 import { EmmetToken } from '../../../EmmetToken/EmmetToken'
-import { State, Template, parseTokens2 } from '../../parseTokens2'
+import { Template } from '../../../Template/Template'
+import { State, parseTokens } from '../../parseTokens'
 import { replaceCountMarker } from '../../replaceCountMarker/replaceCountMarker'
 
 export function multiplyInstruction( token: EmmetToken ) {
@@ -64,7 +65,7 @@ function multiplyGroup(state: State, n: number) {
 	let { template } = state
 	
 	for(let i = 0; i < n; i++) {
-		const groupRoot = parseTokens2(groupTokens, i+1)
+		const groupRoot = parseTokens(groupTokens, i+1)
 		groupRoot.previous = template
 		template.next = groupRoot
 		template = getLastTemplate(groupRoot)

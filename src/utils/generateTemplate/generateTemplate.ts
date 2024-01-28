@@ -1,35 +1,31 @@
 import fs from 'fs'
 import path from 'path'
 import { Template } from '../Template/Template.js'
+import { Settings } from '../Settings/Settings.js'
 
 export function generateTemplate(root: Template) {
-	const queue = [root]
-	let nextLevel = []
+	let template: Template | undefined = root
 
-	while (queue.length > 0) {
-		const template = queue.shift()
-		if(!template) break
+	while (template) {
+		const { location, type } = template
+		const source = findSource(type)
 
-		const { templateSrc, location, child, nextSibling } = template
-
-		if (child) {
-			nextLevel.push(child)
-		}
-
-		createTemplate(templateSrc, location, template)
-
-		if (nextSibling) {
-			queue.push(nextSibling)
-		}
-
-		if (queue.length === 0) {
-			queue.push(...nextLevel)
-			nextLevel = []
-		}
+		createTemplate(source, location, template)
+		template = template.next
 	}
 }
 
-function createTemplate(source:string, destination:string, template: Template) {
+function findSource(type: string) {
+	const { templatesSource } = Settings
+	const source = path.resolve(`${templatesSource}/${type}`)
+	if(!fs.existsSync(source)) {
+		console.error(`no ${type} found at ${source}`)
+		process.exit(1)
+	}
+	return source
+}
+
+function createTemplate(source: string, destination: string, template: Template) {
 	const items = fs.readdirSync(source)
 
 	const files = []

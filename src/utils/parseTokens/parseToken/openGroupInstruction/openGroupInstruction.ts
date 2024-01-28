@@ -1,4 +1,4 @@
-import { State } from '../../parseTokens2'
+import { State } from '../../parseTokens'
 
 export function openGroupInstruction() {
 	return (state: State) => {

@@ -1,124 +1,36 @@
-import fs from 'fs'
-import path from 'path'
-import { getReplacementMap } from '../getReplacementMap/getReplacementMap.js'
-import { Settings } from '../Settings/Settings.js'
-
-type TemplateInput = {
+export type TemplateProps = {
 	name: string
 	location: string
-	type?: string
-	nextSibling?: Template | null
-	child?: Template | null
-	operation?: string
-	previous?: Template | null
+	type: string
+	className: string
+	next?: Template
+	previous?: Template
+	replacements?: Map<string, string>
 }
 
 export class Template {
 	name: string
-	type: string
-	templateSrc: string
 	location: string
-	child: Template | null
-	nextSibling: Template | null
-	replacements: Map<string, string> | null
+	type: string
+	next?: Template
+	previous?: Template
+	replacements: Map<string, string>
+	className: string
 	constructor({
 		name,
 		location,
 		type = 'default',
-		nextSibling = null,
-		child = null,
-		operation = '',
-		previous = null,
-	}: TemplateInput) {
+		className = 'default',
+		next,
+		previous,
+		replacements,
+	}: TemplateProps) {
 		this.name = name
+		this.location = location
 		this.type = type
-		this.templateSrc = this.getMatchingTemplate(type)
-		this.location = path.resolve(location)
-		this.child = child
-		this.nextSibling = nextSibling
-		this.replacements = null
-		this.operate(operation, previous)
-	}
-
-	operate(operation: string, previous: Template | null) {
-		switch (operation) {
-			case 'sibling':
-				if (!previous) break
-				previous.nextSibling = this
-				this.location = previous.location
-				break
-			case 'child':
-				if (!previous) break
-				previous.child = this
-
-				this.location = previous.getChildLocation()
-				break
-			case 'up':
-				if (!previous) break
-				this.location = previous.location
-				previous.nextSibling = this
-				break
-			case 'empty':
-				this.type = 'empty'
-				this.templateSrc = this.getMatchingTemplate('empty')
-
-				if (!previous) break
-
-				if (this.location !== previous.location) {
-					previous.child = this
-					this.location = previous.getChildLocation()
-				} else {
-					previous.nextSibling = this
-				}
-				break
-
-			default:
-				break
-		}
-	}
-
-	getMatchingTemplate(type: string) {
-		const templatePath = Settings.templatesSource
-		const templates = fs.readdirSync(templatePath)
-
-		if (!templates.includes(type)) {
-			console.error(`no template ${type} found in the emmet-gen-templates`)
-			process.exit(1)
-		}
-
-		const templateSrc = path.resolve(`${templatePath}/${type}`)
-		const srcDir = fs.readdirSync(templateSrc)
-
-		for (let i = 0; i < srcDir.length; i++) {
-			const template = srcDir[i]
-			if (!/__TemplateName__/g.test(template) || srcDir.length > 1) {
-				console.error(
-					`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`,
-				)
-				process.exit(1)
-			}
-		}
-
-		return templateSrc
-	}
-
-	getChildLocation() {
-		const templates = fs.readdirSync(this.templateSrc)
-
-		templates[0] = templates[0].replace(/__TemplateName__/g, this.name)
-		return path.resolve(`${this.location}/${templates[0]}`)
-	}
-
-	setClass(type: string) {
-		this.templateSrc = this.getMatchingTemplate(type)
-		this.type = type
-	}
-
-	setId(type: string) {
-		this.templateSrc = this.getMatchingTemplate(type)
-	}
-
-	setReplacements(attr: string) {
-		this.replacements = getReplacementMap(attr)
+		this.className = className
+		this.next ??= next
+		this.previous ??= previous
+		this.replacements = replacements || new Map<string, string>()
 	}
 }

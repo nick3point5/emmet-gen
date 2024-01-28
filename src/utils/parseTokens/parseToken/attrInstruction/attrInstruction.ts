@@ -1,6 +1,6 @@
 import { EmmetToken } from '../../../EmmetToken/EmmetToken'
 import { getReplacementMap } from '../../../getReplacementMap/getReplacementMap'
-import { State } from '../../parseTokens2'
+import { State } from '../../parseTokens'
 
 export function attrInstruction(token: EmmetToken) {
 	return (state: State) => {

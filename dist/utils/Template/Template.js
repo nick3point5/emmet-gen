@@ -1,87 +1,13 @@
-import fs from 'fs';
-import path from 'path';
-import { getReplacementMap } from '../getReplacementMap.js';
-import { Settings } from '../Settings/Settings.js';
 export class Template {
-    constructor({ name, location, type = 'default', nextSibling = null, child = null, operation = '', previous = null, }) {
+    constructor({ name, location, type = 'default', className = 'default', next, previous, replacements, }) {
+        var _a, _b;
         this.name = name;
+        this.location = location;
         this.type = type;
-        this.templateSrc = this.getMatchingTemplate(type);
-        this.location = path.resolve(location);
-        this.child = child;
-        this.nextSibling = nextSibling;
-        this.replacements = null;
-        this.operate(operation, previous);
-    }
-    operate(operation, previous) {
-        switch (operation) {
-            case 'sibling':
-                if (!previous)
-                    break;
-                previous.nextSibling = this;
-                this.location = previous.location;
-                break;
-            case 'child':
-                if (!previous)
-                    break;
-                previous.child = this;
-                this.location = previous.getChildLocation();
-                break;
-            case 'up':
-                if (!previous)
-                    break;
-                this.location = previous.location;
-                previous.nextSibling = this;
-                break;
-            case 'empty':
-                this.type = 'empty';
-                this.templateSrc = this.getMatchingTemplate('empty');
-                if (!previous)
-                    break;
-                if (this.location !== previous.location) {
-                    previous.child = this;
-                    this.location = previous.getChildLocation();
-                }
-                else {
-                    previous.nextSibling = this;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-    getMatchingTemplate(type) {
-        const templatePath = Settings.templatesSource;
-        const templates = fs.readdirSync(templatePath);
-        if (!templates.includes(type)) {
-            console.error(`no template ${type} found in the emmet-gen-templates`);
-            process.exit(1);
-        }
-        const templateSrc = path.resolve(`${templatePath}/${type}`);
-        const srcDir = fs.readdirSync(templateSrc);
-        for (let i = 0; i < srcDir.length; i++) {
-            const template = srcDir[i];
-            if (!/__TemplateName__/g.test(template) || srcDir.length > 1) {
-                console.error(`there must be exactly 1 file or directory with a name containing "__TemplateName__" in the template: ${type}`);
-                process.exit(1);
-            }
-        }
-        return templateSrc;
-    }
-    getChildLocation() {
-        const templates = fs.readdirSync(this.templateSrc);
-        templates[0] = templates[0].replace(/__TemplateName__/g, this.name);
-        return path.resolve(`${this.location}/${templates[0]}`);
-    }
-    setClass(type) {
-        this.templateSrc = this.getMatchingTemplate(type);
-        this.type = type;
-    }
-    setId(type) {
-        this.templateSrc = this.getMatchingTemplate(type);
-    }
-    setReplacements(attr) {
-        this.replacements = getReplacementMap(attr);
+        this.className = className;
+        (_a = this.next) !== null && _a !== void 0 ? _a : (this.next = next);
+        (_b = this.previous) !== null && _b !== void 0 ? _b : (this.previous = previous);
+        this.replacements = replacements || new Map();
     }
 }
 //# sourceMappingURL=Template.js.map
