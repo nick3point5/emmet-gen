@@ -5,7 +5,7 @@ import path from 'path'
 import { Command } from 'commander'
 import { parseEmmet } from './utils/parseEmmet/parseEmmet.js'
 import { generateInit } from './utils/generateInit/generateInit.js'
-import { parseString } from './utils/parseString/parseString.js'
+import { emmetLexer } from './utils/emmetLexer/emmetLexer.js'
 import { parseTokens } from './utils/parseTokens/parseTokens.js'
 import { generateTemplate } from './utils/generateTemplate/generateTemplate.js'
 import { indexer } from './utils/indexer/indexer.js'
@@ -29,7 +29,7 @@ program
 	.option('-l, --load', 'loads from json')
 	.description('Generate the initial files for emmet-gen')
 	.argument('[input]')
-	.action((input, option) => {
+	.action((input: string, option: { save: boolean; load: boolean }) => {
 		if (option.save) {
 			Settings.init()
 			saveInit(input)
@@ -51,7 +51,7 @@ program
 	.argument('<location...>')
 	.option('-r, --recursive', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
-	.action((locations: string[], option) => {
+	.action((locations: string[], option: { absolute: boolean; recursive: boolean }) => {
 		Settings.init()
 		locations.forEach((location) => {
 			if (Settings.relative && !option.absolute) {
@@ -67,14 +67,14 @@ program
 	.argument('[emmet]')
 	.option('-i, --index', 'recursively generate index files')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
-	.action((input, option) => {
-		Settings.init(!!option.absolute)
-		const emmetStrings = parseString(input)
+	.action((input: string, option: { absolute: boolean; index: boolean }) => {
+		Settings.init(option.absolute)
+		const emmetStrings = emmetLexer(input)
 		const emmetTokens = parseEmmet(emmetStrings)
 		const rootTemplate = parseTokens(emmetTokens)
 		generateTemplate(rootTemplate)
 
-		if (!!option.index || !!Settings.auto_imports) {
+		if (option.index || Settings.auto_imports) {
 			indexer(rootTemplate.location, true)
 		}
 
