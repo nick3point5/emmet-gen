@@ -43,8 +43,6 @@ export class Settings {
 
 		const templatesSrc = path.resolve(configLocation, '..', config.templatesSource)
 
-		console.log(config.templatesSource)
-
 		if (!fs.existsSync(templatesSrc)) {
 			console.error(`no emmet-gen-templates found at ${templatesSrc}`)
 			process.exit(1)

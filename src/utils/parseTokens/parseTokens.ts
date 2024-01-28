@@ -23,18 +23,19 @@ export type State = {
 
 export function parseTokens(
 	emmetTokens: EmmetToken[],
-	groupCount = 0
+	groupCount = 0,
+	location = Settings.baseUrl
 ) {
 	const root = new Template({
-		name: 'root',
-		location: Settings.baseUrl,
+		name: '',
+		location: location,
 		type: 'default',
 		className: 'default',
 	})
 
 	let state: State = {
 		template: root,
-		location: Settings.baseUrl,
+		location: location,
 		classStack: ['default'],
 		multiplyStart: 0,
 		tokenIndex: 0,
@@ -50,7 +51,7 @@ export function parseTokens(
 		state.tokenIndex++
 	}
 
-	if(emmetTokens[0].type === 'openGroup' && root.next) {
+	if(root.name === '' && root.next) {
 		const openRoot = root.next
 		openRoot.previous = undefined
 		return openRoot

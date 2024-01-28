@@ -15,9 +15,14 @@ export function openGroupInstruction() {
 }
 
 function findClosingGroup(state: State) {
-	const { tokenIndex, tokens } = state
+	const { template, tokenIndex, tokens } = state
 	let openCount = 1
 	let index = tokenIndex
+
+	if(template.name === '' && template.previous) {
+		const parentTemplate = template.previous
+		state.template = parentTemplate
+	}
 
 	while(index < tokens.length) {
 		if(tokens[index].type === 'openGroup') {

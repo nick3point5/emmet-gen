@@ -65,7 +65,7 @@ function multiplyGroup(state: State, n: number) {
 	let { template } = state
 	
 	for(let i = 0; i < n; i++) {
-		const groupRoot = parseTokens(groupTokens, i+1)
+		const groupRoot = parseTokens(groupTokens, i+1, groupState.location)
 		groupRoot.previous = template
 		template.next = groupRoot
 		template = getLastTemplate(groupRoot)
