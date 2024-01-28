@@ -7,3 +7,4 @@ dist/
 todo.md
 build/
 pnpm-lock.yaml
+!data/emmet-gen-templates.json
