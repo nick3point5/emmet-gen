@@ -1,25 +1,24 @@
 export function parseString(string) {
-	const regexArray = []
-	const regexOptions = {
-		idRegex: '\\#',
-		classRegex: '\\.',
-		siblingRegex: '\\+',
-		childRegex: '\\>',
-		upRegex: '\\^',
-		emptyRegex: '(\\\\|\\/)',
-		multiplyRegex: '\\*\\d+',
-		multiplyStartRegex: '\\@\\d+',
-		openGroupRegex: '\\(',
-		closeGroupRegex: '\\)',
-		attrRegex: '\\[.*\\]',
-		nameRegex: '(\\w+|\\$+)+',
-	}
-	for (const regex in regexOptions) {
-		const regexString = regexOptions[regex]
-		regexArray.push(regexString)
-	}
-	const emmetRegex = new RegExp(`(${regexArray.join('|')})`, 'g')
-	const emmetStrings = string.match(emmetRegex)
-	return emmetStrings || []
+    const regexArray = [];
+    const regexMatches = new Map([
+        ['id', '\\#'],
+        ['class', '\\.'],
+        ['sibling', '\\+'],
+        ['child', '\\>'],
+        ['up', '\\^'],
+        ['empty', '(\\\\|\\/)'],
+        ['multiply', '\\*\\d+'],
+        ['multiplyStart', '\\@\\d+'],
+        ['openGroup', '\\('],
+        ['closeGroup', '\\)'],
+        ['attr', '\\[.*\\]'],
+        ['name', '(\\w+|\\$+)+'],
+    ]);
+    regexMatches.forEach((value) => {
+        regexArray.push(value);
+    });
+    const emmetRegex = new RegExp(`(${regexArray.join('|')})`, 'g');
+    const emmetStrings = string.match(emmetRegex);
+    return emmetStrings || [];
 }
 //# sourceMappingURL=parseString.js.map

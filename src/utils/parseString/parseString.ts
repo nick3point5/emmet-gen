@@ -1,26 +1,24 @@
-type StringMap = { [key: string]: string }
-
 export function parseString(string: string) {
-	const regexArray = []
-	const regexOptions:StringMap = {
-		idRegex: '\\#',
-		classRegex: '\\.',
-		siblingRegex: '\\+',
-		childRegex: '\\>',
-		upRegex: '\\^',
-		emptyRegex: '(\\\\|\\/)',
-		multiplyRegex: '\\*\\d+',
-		multiplyStartRegex: '\\@\\d+',
-		openGroupRegex: '\\(',
-		closeGroupRegex: '\\)',
-		attrRegex: '\\[.*\\]',
-		nameRegex: '(\\w+|\\$+)+',
-	}
+	const regexArray: string[] = []
 
-	for (const regex in regexOptions) {
-		const regexString = regexOptions[regex]
-		regexArray.push(regexString)
-	}
+	const regexMatches = new Map<string, string>([
+		['id', '\\#'],
+		['class', '\\.'],
+		['sibling', '\\+'],
+		['child', '\\>'],
+		['up', '\\^'],
+		['empty', '(\\\\|\\/)'],
+		['multiply', '\\*\\d+'],
+		['multiplyStart', '\\@\\d+'],
+		['openGroup', '\\('],
+		['closeGroup', '\\)'],
+		['attr', '\\[.*\\]'],
+		['name', '(\\w+|\\$+)+'],
+	])
+
+	regexMatches.forEach((value) => {
+		regexArray.push(value)
+	})
 
 	const emmetRegex = new RegExp(`(${regexArray.join('|')})`, 'g')
 

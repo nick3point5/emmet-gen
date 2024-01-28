@@ -1,5 +1,4 @@
-import { expect } from 'vitest'
-import { test, describe } from 'vitest'
+import { test, expect, describe } from 'vitest'
 import { EmmetToken } from './EmmetToken'
 
 type TokenMap = { [key: string]: {

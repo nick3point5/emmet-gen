@@ -95,24 +95,24 @@ npx emmet-gen hello\>world\$\*5
   sets the template of the preceding tag
 
 ```shell
-npx emmet-gen hello#file\>world
+npx emmet-gen hello\>world#file
 ```
 
-#### CLASS
+#### CLASS: .
 
-  sets the template inheritance of the preceding tag and its children.
+  sets the template of the preceding tag and subsequent templates.
 
 ```shell
 npx emmet-gen hello.file
 ```
 
-#### Custom Replace: [target="substitute"]
+#### Replace Contents: [target="substitute"]
 
   replaces target text within a file with the substitute text
 <b>NOTE: substitute must be wrapped in double quotes</b>
 
 ```shell
-npx npx emmet-gen hello.file[log=\"error\"]
+npx emmet-gen hello[log=\"error\"]
 ```
 
 #### empty: /

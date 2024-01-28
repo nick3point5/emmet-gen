@@ -1,35 +1,51 @@
-import path from 'path'
 import { expect } from 'vitest'
 import { test, describe } from 'vitest'
 import { parseTokens } from './parseTokens.js'
 import { parseString } from '../parseString/parseString.js'
 import { parseEmmet } from '../parseEmmet/parseEmmet.js'
-import { getConfig } from '../getConfig.js'
+import { Settings } from '../Settings/Settings.js'
 import { Template } from '../Template/Template.js'
 
-const { settings } = getConfig()
+Settings.init()
 
 describe('should parse tokens', () => {
+	test('name', () => {
+		const string = 'hello'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		expect(root).toStrictEqual(hello)
+	})
 	test('siblings', () => {
 		const string = 'hello+world'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
-
-		const world = new Template({
-			name: 'world',
-			location: settings.baseUrl,
-			type: 'default',
-			settings,
-		})
+		const root = parseTokens(emmetToken)
 
 		const hello = new Template({
 			name: 'hello',
-			location: settings.baseUrl,
+			location: Settings.baseUrl,
 			type: 'default',
-			nextSibling: world,
-			settings,
+			className: 'default',
 		})
+
+		const world = new Template({
+			name: 'world',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
 
 		expect(root).toStrictEqual(hello)
 	})
@@ -37,52 +53,58 @@ describe('should parse tokens', () => {
 		const string = 'hello>world'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
-
-		const world = new Template({
-			name: 'world',
-			location: `${settings.baseUrl}/hello`,
-			type: 'default',
-			settings,
-		})
+		const root = parseTokens(emmetToken)
 
 		const hello = new Template({
 			name: 'hello',
-			location: settings.baseUrl,
+			location: Settings.baseUrl,
 			type: 'default',
-			child: world,
-			settings,
+			className: 'default',
 		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'default',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
+
 		expect(root).toStrictEqual(hello)
 	})
 	test('up', () => {
 		const string = 'hello>world^mister'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
 
 		const world = new Template({
 			name: 'world',
-			location: `${settings.baseUrl}/hello`,
+			location: `${Settings.baseUrl}/hello`,
 			type: 'default',
-			settings,
+			className: 'default',
+			previous: hello,
 		})
 
 		const mister = new Template({
 			name: 'mister',
-			location: `${settings.baseUrl}`,
+			location: `${Settings.baseUrl}`,
 			type: 'default',
-			settings,
+			className: 'default',
+			previous: world,
 		})
 
-		const hello = new Template({
-			name: 'hello',
-			location: settings.baseUrl,
-			type: 'default',
-			child: world,
-			nextSibling: mister,
-			settings,
-		})
+		hello.next = world
+		world.next = mister
 
 		expect(root).toStrictEqual(hello)
 	})
@@ -90,14 +112,39 @@ describe('should parse tokens', () => {
 		const string = '/hello'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
 		const hello = new Template({
 			name: 'hello',
-			location: settings.baseUrl,
+			location: Settings.baseUrl,
 			type: 'empty',
-			settings,
+			className: 'default',
 		})
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('empty chaining', () => {
+		const string = '/hello/world'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'empty',
+			className: 'default',
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'empty',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
 
 		expect(root).toStrictEqual(hello)
 	})
@@ -105,9 +152,9 @@ describe('should parse tokens', () => {
 		const string = 'hello$*10'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
-		let previous = null
+		let previous = undefined
 
 		let hello
 
@@ -115,16 +162,16 @@ describe('should parse tokens', () => {
 		for (let i = 0; i < n; i++) {
 			const helloCopy: Template = new Template({
 				name: `hello${i + 1}`,
-				location: settings.baseUrl,
+				location: Settings.baseUrl,
 				type: 'default',
+				className: 'default',
 				previous,
-				settings,
 			})
 
 			if (i === 0) {
 				hello = helloCopy
 			} else if (previous) {
-				previous.nextSibling = helloCopy
+				previous.next = helloCopy
 			}
 			previous = helloCopy
 		}
@@ -135,9 +182,9 @@ describe('should parse tokens', () => {
 		const string = 'hello$@5*10'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
-		let previous = null
+		let previous = undefined
 
 		let hello
 
@@ -145,16 +192,16 @@ describe('should parse tokens', () => {
 		for (let i = 4; i < n; i++) {
 			const helloCopy: Template = new Template({
 				name: `hello${i + 1}`,
-				location: settings.baseUrl,
+				location: Settings.baseUrl,
 				type: 'default',
+				className: 'default',
 				previous,
-				settings,
 			})
 
 			if (i === 4) {
 				hello = helloCopy
 			} else if (previous) {
-				previous.nextSibling = helloCopy
+				previous.next = helloCopy
 			}
 			previous = helloCopy
 		}
@@ -165,34 +212,36 @@ describe('should parse tokens', () => {
 		const string = '(hello$+world$)*5'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
-		let previous = null
-
+		let previous
 		let hello
 
 		const n = 5
 		for (let i = 0; i < n; i++) {
-			const worldCopy = new Template({
-				name: `world${i + 1}`,
-				location: settings.baseUrl,
+			const helloCopy: Template = new Template({
+				name: `hello${i + 1}`,
+				location: Settings.baseUrl,
 				type: 'default',
-				settings,
+				className: 'default',
+				previous: previous,
 			})
 
-			const helloCopy = new Template({
-				name: `hello${i + 1}`,
-				location: settings.baseUrl,
+			const worldCopy: Template = new Template({
+				name: `world${i + 1}`,
+				location: Settings.baseUrl,
 				type: 'default',
-				nextSibling: worldCopy,
-				settings,
+				className: 'default',
+				previous: helloCopy,
 			})
 
 			if (i === 0) {
 				hello = helloCopy
-			} else if (previous) {
-				previous.nextSibling = helloCopy
 			}
+			if (previous) {
+				previous.next = helloCopy
+			}
+			helloCopy.next = worldCopy
 			previous = worldCopy
 		}
 
@@ -202,13 +251,13 @@ describe('should parse tokens', () => {
 		const string = 'hello[world="yes"]'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
 		const hello = new Template({
 			name: 'hello',
-			location: settings.baseUrl,
+			location: Settings.baseUrl,
 			type: 'default',
-			settings,
+			className: 'default',
 		})
 
 		const worldMap = new Map()
@@ -221,7 +270,7 @@ describe('should parse tokens', () => {
 		const string = 'hello$[world="yes"]*5'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
 		let hello
 		let previous
@@ -233,15 +282,16 @@ describe('should parse tokens', () => {
 		for (let i = 0; i < n; i++) {
 			const helloCopy: Template = new Template({
 				name: `hello${i + 1}`,
-				location: settings.baseUrl,
+				location: Settings.baseUrl,
 				type: 'default',
+				className: 'default',
 				previous,
-				settings,
 			})
 			if (i === 0) {
 				hello = helloCopy
-			} else if (previous) {
-				previous.nextSibling = helloCopy
+			}
+			if (previous) {
+				previous.next = helloCopy
 			}
 			helloCopy.replacements = worldMap
 			previous = helloCopy
@@ -253,105 +303,419 @@ describe('should parse tokens', () => {
 		const string = '/hello>world'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'empty',
+			className: 'default',
+		})
 
 		const world = new Template({
 			name: 'world',
-			location: `${settings.baseUrl}/hello`,
+			location: `${Settings.baseUrl}/hello`,
 			type: 'default',
-			settings,
+			className: 'default',
+			previous: hello,
 		})
+
+		hello.next = world
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('class should change type', () => {
+		const string = 'hello.test'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
 
 		const hello = new Template({
 			name: 'hello',
-			location: settings.baseUrl,
-			type: 'empty',
-			child: world,
-			settings,
+			location: Settings.baseUrl,
+			type: 'test',
+			className: 'test',
 		})
 
 		expect(root).toStrictEqual(hello)
 	})
 	test('root class should apply to all', () => {
-		const string = '.test>hello'
+		const string = 'hello.test>world'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
+		const root = parseTokens(emmetToken)
 
 		const hello = new Template({
 			name: 'hello',
-			location: settings.baseUrl,
+			location: Settings.baseUrl,
 			type: 'test',
-			settings,
-		})
-
-		expect(root).toStrictEqual(hello)
-	})
-	test('class should overwrite empty parent', () => {
-		const string = '/hello/world/thing.test'
-		const emmetString = parseString(string)
-		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
-
-		const thing = new Template({
-			name: 'thing',
-			location: `${settings.baseUrl}/hello/world`,
-			type: 'test',
-			settings,
+			className: 'test',
 		})
 
 		const world = new Template({
 			name: 'world',
-			location: `${settings.baseUrl}/hello`,
-			type: 'empty',
-			child: thing,
-			settings,
-		})
-		const hello = new Template({
-			name: 'hello',
-			location: settings.baseUrl,
-			type: 'empty',
-			child: world,
-			settings,
+			location: `${Settings.baseUrl}/hello`,
+			type: 'test',
+			className: 'test',
+			previous: hello,
 		})
 
-		hello.templateSrc = path.resolve(settings.templatesSource, './empty')
-		world.templateSrc = path.resolve(settings.templatesSource, './empty')
-		thing.templateSrc = path.resolve(settings.templatesSource, './test')
+		hello.next = world
 
 		expect(root).toStrictEqual(hello)
+	})
+	test('id should change type', () => {
+		const string = 'test#test'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const test = new Template({
+			name: 'test',
+			location: Settings.baseUrl,
+			type: 'test',
+			className: 'default',
+		})
+
+		expect(root).toStrictEqual(test)
 	})
 	test('root class should apply to all', () => {
-		const string = '.test>/hello/world>thing'
+		const string = 'hello.test>world#default>thing'
 		const emmetString = parseString(string)
 		const emmetToken = parseEmmet(emmetString)
-		const root = parseTokens(emmetToken, settings)
-
-		const thing = new Template({
-			name: 'thing',
-			location: `${settings.baseUrl}/hello/world`,
+		const root = parseTokens(emmetToken)
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
 			type: 'test',
-			settings,
+			className: 'test',
 		})
 
 		const world = new Template({
 			name: 'world',
-			location: `${settings.baseUrl}/hello`,
-			type: 'empty',
-			child: thing,
-			settings,
-		})
-		const hello = new Template({
-			name: 'hello',
-			location: settings.baseUrl,
-			type: 'empty',
-			child: world,
-			settings,
+			location: `${Settings.baseUrl}/hello`,
+			type: 'default',
+			className: 'test',
+			previous: hello,
 		})
 
-		hello.templateSrc = path.resolve(settings.templatesSource, './empty')
-		world.templateSrc = path.resolve(settings.templatesSource, './empty')
-		thing.templateSrc = path.resolve(settings.templatesSource, './test')
+		const thing = new Template({
+			name: 'thing',
+			location: `${Settings.baseUrl}/hello/world`,
+			type: 'test',
+			className: 'test',
+			previous: world,
+		})
+
+		hello.next = world
+		world.next = thing
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('grouping children', () => {
+		const string = 'hello>(to$+the$+world$)*3'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		let previous = hello
+
+		for (let i = 0; i < 3; i++) {
+			const toCopy = new Template({
+				name: 'to'+(i+1),
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous: previous
+			})
+	
+			const theCopy = new Template({
+				name: 'the'+(i+1),
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous: toCopy
+			})
+	
+			const worldCopy = new Template({
+				name: 'world'+(i+1),
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous: theCopy
+			})
+
+			previous.next = toCopy
+			toCopy.next = theCopy
+			theCopy.next = worldCopy
+			previous = worldCopy
+		}
+
+		expect(root).toStrictEqual(hello)
+	})
+})
+
+describe('should parse examples', () => {
+	test('Child: >', () => {
+		const string = 'hello>world'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'default',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('Sibling: +', () => {
+		const string = 'hello+world'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('Climb-up: ^', () => {
+		const string = 'hello>to+the^world'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		const to = new Template({
+			name: 'to',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'default',
+			className: 'default',
+			previous: hello
+		})
+
+		const the = new Template({
+			name: 'the',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'default',
+			className: 'default',
+			previous: to
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${Settings.baseUrl}`,
+			type: 'default',
+			className: 'default',
+			previous: the,
+		})
+
+		hello.next = to
+		to.next = the
+		the.next = world
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('Multiplication: *', () => {
+		const string = 'hello>world$*5'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		let previous = hello
+
+		const n = 5
+		for (let i = 0; i < n; i++) {
+			const worldCopy: Template = new Template({
+				name: `world${i + 1}`,
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous,
+			})
+
+			previous.next = worldCopy
+			previous = worldCopy
+		}
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('ID: #', () => {
+		const string = 'hello>world#file'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'file',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('CLASS: .', () => {
+		const string = 'hello.file'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'file',
+			className: 'file',
+		})
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('Replace Contents: ', () => {
+		const string = 'hello[log="error"]'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const map = new Map()
+		map.set('log', 'error')
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+			replacements: map,
+		})
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('empty: /', () => {
+		const string = '/hello/world'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'empty',
+			className: 'default',
+		})
+
+		const world = new Template({
+			name: 'world',
+			location: `${Settings.baseUrl}/hello`,
+			type: 'empty',
+			className: 'default',
+			previous: hello,
+		})
+
+		hello.next = world
+
+		expect(root).toStrictEqual(hello)
+	})
+	test('Grouping: ()', () => {
+		const string = 'hello>(to$+the$+world$)*5'
+		const emmetString = parseString(string)
+		const emmetToken = parseEmmet(emmetString)
+		const root = parseTokens(emmetToken)
+
+		const hello = new Template({
+			name: 'hello',
+			location: Settings.baseUrl,
+			type: 'default',
+			className: 'default',
+		})
+
+		let previous = hello
+
+		for (let i = 0; i < 5; i++) {
+			const toCopy = new Template({
+				name: 'to'+(i+1),
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous: previous
+			})
+	
+			const theCopy = new Template({
+				name: 'the'+(i+1),
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous: toCopy
+			})
+	
+			const worldCopy = new Template({
+				name: 'world'+(i+1),
+				location: `${Settings.baseUrl}/hello`,
+				type: 'default',
+				className: 'default',
+				previous: theCopy
+			})
+
+			previous.next = toCopy
+			toCopy.next = theCopy
+			theCopy.next = worldCopy
+			previous = worldCopy
+		}
 
 		expect(root).toStrictEqual(hello)
 	})
