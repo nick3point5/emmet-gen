@@ -2,7 +2,6 @@ import { test, describe, expect } from 'vitest'
 import { Settings } from './Settings'
 import path from 'path'
 
-
 describe('Settings test', () => {
 	test('should exist', () => {
 		expect(Settings).toBeDefined()

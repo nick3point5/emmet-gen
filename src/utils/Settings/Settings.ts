@@ -27,7 +27,7 @@ export class Settings {
 	}
 
 	public static reset() {
-		Settings.self =  new Settings()
+		Settings.self = new Settings()
 	}
 
 	public static getConfig(isAbsolute?: boolean) {
@@ -36,7 +36,9 @@ export class Settings {
 
 		while (!fs.existsSync(Settings.configLocation)) {
 			previous = Settings.configLocation
-			Settings.configLocation = path.resolve(`${Settings.configLocation}/../../emmet-gen-templates.json`)
+			Settings.configLocation = path.resolve(
+				`${Settings.configLocation}/../../emmet-gen-templates.json`,
+			)
 
 			if (previous === Settings.configLocation) {
 				console.error('no emmet-gen-templates.json found')
@@ -44,7 +46,9 @@ export class Settings {
 			}
 		}
 
-		const config: typeof ConfigType = JSON.parse(fs.readFileSync(Settings.configLocation).toString())
+		const config: typeof ConfigType = JSON.parse(
+			fs.readFileSync(Settings.configLocation).toString(),
+		)
 
 		const templatesSrc = path.resolve(Settings.configLocation, '..', config.templatesSource)
 

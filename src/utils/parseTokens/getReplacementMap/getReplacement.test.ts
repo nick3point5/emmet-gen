@@ -18,7 +18,7 @@ describe('getReplacementMap test', () => {
 		expect(getReplacementMap(tokenValue)).toStrictEqual(map)
 	})
 	test('should parse value with single quotes', () => {
-		const tokenValue = '[title=\'Hello world\']'
+		const tokenValue = "[title='Hello world']"
 		const map = new Map([['title', 'Hello world']])
 
 		expect(getReplacementMap(tokenValue)).toStrictEqual(map)
