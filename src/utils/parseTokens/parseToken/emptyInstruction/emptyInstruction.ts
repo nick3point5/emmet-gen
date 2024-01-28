@@ -19,7 +19,7 @@ export function emptyInstruction() {
 			return state
 		}
 
-		template.type = 'empty' 
+		template.type = 'empty'
 		return state
 	}
 }

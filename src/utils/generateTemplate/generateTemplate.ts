@@ -18,7 +18,7 @@ export function generateTemplate(root: Template) {
 function findSource(type: string) {
 	const { templatesSource } = Settings
 	const source = path.resolve(`${templatesSource}/${type}`)
-	if(!fs.existsSync(source)) {
+	if (!fs.existsSync(source)) {
 		console.error(`no ${type} found at ${source}`)
 		process.exit(1)
 	}

@@ -89,6 +89,13 @@ npx emmet-gen hello\>to+the^world
 ```shell
 npx emmet-gen hello\>world\$\*5
 ```
+#### Multiplication initial count: @
+
+  multiplies a tag starting from a count
+
+```shell
+npx emmet-gen hello\>world\$\@5*10
+```
 
 #### ID: \#
 

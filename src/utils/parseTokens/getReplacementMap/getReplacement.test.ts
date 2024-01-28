@@ -25,7 +25,10 @@ describe('getReplacementMap test', () => {
 	})
 	test('should parse value multiple attributes', () => {
 		const tokenValue = '[a=\'value1\' b="value2"]'
-		const map = new Map([['a', 'value1'], ['b', 'value2']])
+		const map = new Map([
+			['a', 'value1'],
+			['b', 'value2'],
+		])
 
 		expect(getReplacementMap(tokenValue)).toStrictEqual(map)
 	})

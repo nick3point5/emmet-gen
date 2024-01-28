@@ -23,10 +23,15 @@ export class InitTemplate {
 			const parentPath = `./${path.relative(basePath, sourceLocation)}`.replace(/\\/g, '/')
 			parent = new InitTemplate('root', null, parentPath, 'directory')
 
-			const jsonLocation = path.resolve(basePath,'emmet-gen-templates.json')
+			const jsonLocation = path.resolve(basePath, 'emmet-gen-templates.json')
 			const jsonPath = `./${path.relative(basePath, jsonLocation)}`.replace(/\\/g, '/')
 			const jsonContent = fs.readFileSync(jsonLocation, 'utf8')
-			const jsonTemplate = new InitTemplate('emmet-gen-templates.json', jsonContent, jsonPath, 'file')
+			const jsonTemplate = new InitTemplate(
+				'emmet-gen-templates.json',
+				jsonContent,
+				jsonPath,
+				'file',
+			)
 
 			parent.children.push(jsonTemplate)
 		}

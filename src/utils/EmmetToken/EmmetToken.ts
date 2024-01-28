@@ -1,14 +1,14 @@
 export class EmmetToken {
 	type: string
 	value: string
-	constructor(tokenString:string) {
+	constructor(tokenString: string) {
 		const { type, value } = parseTokenString(tokenString)
 		this.type = type
 		this.value = value
 	}
 }
 
-export function parseTokenString(tokenString:string) {
+export function parseTokenString(tokenString: string) {
 	const firstChar = tokenString[0]
 	let type
 	let value

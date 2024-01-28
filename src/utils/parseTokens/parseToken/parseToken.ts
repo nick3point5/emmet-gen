@@ -12,35 +12,32 @@ import { attrInstruction } from './attrInstruction/attrInstruction.js'
 import { classInstruction } from './classInstruction/classInstruction.js'
 import { idInstruction } from './idInstruction/idInstruction.js'
 
-export type Instruction = (
-	state: State,
-) => State
+export type Instruction = (state: State) => State
 export function parseToken(token: EmmetToken): Instruction {
 	switch (token.type) {
 		case 'name':
 			return nameInstruction(token)
 		case 'sibling':
-			return siblingInstruction()	
+			return siblingInstruction()
 		case 'child':
-			return childInstruction()	
+			return childInstruction()
 		case 'up':
-			return upInstruction()	
+			return upInstruction()
 		case 'empty':
-			return emptyInstruction()	
+			return emptyInstruction()
 		case 'multiply':
-			return multiplyInstruction(token)	
+			return multiplyInstruction(token)
 		case 'multiplyStart':
-			return multiplyStartInstruction(token)	
+			return multiplyStartInstruction(token)
 		case 'openGroup':
-			return openGroupInstruction()	
+			return openGroupInstruction()
 		case 'attr':
-			return attrInstruction(token)	
+			return attrInstruction(token)
 		case 'class':
-			return classInstruction()	
+			return classInstruction()
 		case 'id':
-			return idInstruction()	
+			return idInstruction()
 		default:
 			return nameInstruction(token)
 	}
-
 }

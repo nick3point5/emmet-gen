@@ -9,4 +9,3 @@ export function replaceCountMarker(name: string, count: number) {
 	const countName = String(count).padStart(padLength, '0')
 	return name.replace(/\$+/g, countName)
 }
-
