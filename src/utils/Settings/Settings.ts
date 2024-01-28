@@ -1,4 +1,4 @@
-import type ConfigType from '../../data/emmet-gen-templates.json'
+import type ConfigType from '../../../data/emmet-gen-templates.json'
 import fs from 'fs'
 import path from 'path'
 
