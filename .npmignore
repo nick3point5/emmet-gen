@@ -10,3 +10,6 @@ build/
 emmet-gen-templates/
 emmet-gen-templates.json
 tsconfig.json
+initTest.json
+rollup.config.js
+vitest.config.ts
