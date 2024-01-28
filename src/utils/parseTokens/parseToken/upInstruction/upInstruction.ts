@@ -5,7 +5,7 @@ export function upInstruction() {
 	return (state: State) => {
 		const { template, location, classStack } = state
 		const className = classStack.pop()
-		if(className === undefined) {
+		if (className === undefined) {
 			console.error('cannot go up further')
 			process.exit(1)
 		}

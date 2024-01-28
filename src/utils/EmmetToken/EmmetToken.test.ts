@@ -1,14 +1,16 @@
 import { test, expect, describe } from 'vitest'
 import { EmmetToken } from './EmmetToken'
 
-type TokenMap = { [key: string]: {
-	string:string,
-	value:string,
-	type:string
-}}
+type TokenMap = {
+	[key: string]: {
+		string: string
+		value: string
+		type: string
+	}
+}
 
 describe('EmmetToken class', () => {
-	const tokens:TokenMap = {
+	const tokens: TokenMap = {
 		name: {
 			string: 'hello',
 			value: 'hello',

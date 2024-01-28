@@ -429,27 +429,27 @@ describe('should parse tokens', () => {
 
 		for (let i = 0; i < 3; i++) {
 			const toCopy = new Template({
-				name: 'to'+(i+1),
+				name: 'to' + (i + 1),
 				location: `${Settings.baseUrl}/hello`,
 				type: 'default',
 				className: 'default',
-				previous: previous
+				previous: previous,
 			})
-	
+
 			const theCopy = new Template({
-				name: 'the'+(i+1),
+				name: 'the' + (i + 1),
 				location: `${Settings.baseUrl}/hello`,
 				type: 'default',
 				className: 'default',
-				previous: toCopy
+				previous: toCopy,
 			})
-	
+
 			const worldCopy = new Template({
-				name: 'world'+(i+1),
+				name: 'world' + (i + 1),
 				location: `${Settings.baseUrl}/hello`,
 				type: 'default',
 				className: 'default',
-				previous: theCopy
+				previous: theCopy,
 			})
 
 			previous.next = toCopy
@@ -531,7 +531,7 @@ describe('should parse examples', () => {
 			location: `${Settings.baseUrl}/hello`,
 			type: 'default',
 			className: 'default',
-			previous: hello
+			previous: hello,
 		})
 
 		const the = new Template({
@@ -539,7 +539,7 @@ describe('should parse examples', () => {
 			location: `${Settings.baseUrl}/hello`,
 			type: 'default',
 			className: 'default',
-			previous: to
+			previous: to,
 		})
 
 		const world = new Template({
@@ -688,27 +688,27 @@ describe('should parse examples', () => {
 
 		for (let i = 0; i < 5; i++) {
 			const toCopy = new Template({
-				name: 'to'+(i+1),
+				name: 'to' + (i + 1),
 				location: `${Settings.baseUrl}/hello`,
 				type: 'default',
 				className: 'default',
-				previous: previous
+				previous: previous,
 			})
-	
+
 			const theCopy = new Template({
-				name: 'the'+(i+1),
+				name: 'the' + (i + 1),
 				location: `${Settings.baseUrl}/hello`,
 				type: 'default',
 				className: 'default',
-				previous: toCopy
+				previous: toCopy,
 			})
-	
+
 			const worldCopy = new Template({
-				name: 'world'+(i+1),
+				name: 'world' + (i + 1),
 				location: `${Settings.baseUrl}/hello`,
 				type: 'default',
 				className: 'default',
-				previous: theCopy
+				previous: theCopy,
 			})
 
 			previous.next = toCopy

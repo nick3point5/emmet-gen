@@ -10,7 +10,7 @@
     "start": "node ./dist/main.min.js",
     "test:gh": "node ./dist/main.min.js init test && vitest",
     "test": "vitest",
-    "prettier": "npx prettier --write ./dist",
+    "prettier": "npx prettier --write ./src",
     "lint:fix": "eslint --ext .ts --ignore-path .gitignore . --fix",
     "lint": "eslint --ext .ts --ignore-path .gitignore .",
     "build": "npx tsc && rollup --config"

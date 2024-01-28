@@ -24,7 +24,7 @@ export type State = {
 export function parseTokens(
 	emmetTokens: EmmetToken[],
 	groupCount = 0,
-	location = Settings.baseUrl
+	location = Settings.baseUrl,
 ) {
 	const root = new Template({
 		name: '',
@@ -41,17 +41,17 @@ export function parseTokens(
 		tokenIndex: 0,
 		tokens: emmetTokens,
 		groupCount: groupCount,
-		group: []
+		group: [],
 	}
 
-	while(state.tokenIndex < emmetTokens.length) {
+	while (state.tokenIndex < emmetTokens.length) {
 		const instruction = parseToken(emmetTokens[state.tokenIndex])
 		state = instruction(state)
 
 		state.tokenIndex++
 	}
 
-	if(root.name === '' && root.next) {
+	if (root.name === '' && root.next) {
 		const openRoot = root.next
 		openRoot.previous = undefined
 		return openRoot
