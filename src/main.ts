@@ -12,6 +12,7 @@ import { indexer } from './utils/indexer/indexer.js'
 import { saveInit } from './utils/saveInit/saveInit.js'
 import { loadInit } from './utils/loadInit/loadInit.js'
 import { Settings } from './utils/Settings/Settings.js'
+import { undoTemplates } from './utils/undoTemplates/undoTemplates.js'
 
 const pkgLocation = new URL('../package.json', import.meta.url)
 const pkg = JSON.parse(fs.readFileSync(pkgLocation).toString())
@@ -40,10 +41,12 @@ program
 		}
 	})
 
-program.command('config').action(() => {
-	Settings.init()
-	console.log(Settings)
-})
+program
+	.command('config')
+	.action(() => {
+		Settings.init()
+		console.log(Settings)
+	})
 
 program
 	.command('index')
@@ -65,7 +68,7 @@ program
 
 program
 	.argument('[emmet]')
-	.option('-i, --index', 'recursively generate index files')
+	.option('-i, --index', 'recursively generate index files for JavaScript or TypeScript files using es6 named importing')
 	.option('-a, --absolute', 'sets the base url relative to the emmet-gen-template.json')
 	.action((input: string, option: { absolute: boolean; index: boolean }) => {
 		Settings.init(option.absolute)
@@ -79,6 +82,13 @@ program
 		}
 
 		console.log('Done 📂')
+	})
+
+program
+	.command('undo')
+	.action(() => {
+		Settings.init()
+		undoTemplates()
 	})
 
 program.parse()
