@@ -1,7 +1,8 @@
-import type ConfigType from '../../../data/emmet-gen-templates.json'
+import type jsonType from '../../../data/emmet-gen-templates.json'
 import fs from 'fs'
 import path from 'path'
 
+type ConfigType = typeof jsonType
 export class Settings {
 	public static auto_imports: boolean
 	public static relative: boolean
@@ -9,15 +10,17 @@ export class Settings {
 	public static baseUrl: string
 	public static location: string
 	public static configLocation: string
+	public static undoEnabled: boolean
 	private static self: Settings
 
 	private constructor(isAbsolute?: boolean) {
-		const { settings, settingsLocation } = Settings.getConfig(isAbsolute)
+		const { settings, settingsLocation, undoEnabled } = Settings.getConfig(isAbsolute)
 		Settings.auto_imports = settings.auto_imports
 		Settings.relative = settings.relative
 		Settings.templatesSource = settings.templatesSource
 		Settings.baseUrl = settings.baseUrl
 		Settings.location = settingsLocation
+		Settings.undoEnabled = undoEnabled
 	}
 
 	public static init(isAbsolute?: boolean) {
@@ -46,7 +49,7 @@ export class Settings {
 			}
 		}
 
-		const config: typeof ConfigType = JSON.parse(
+		const config: ConfigType = JSON.parse(
 			fs.readFileSync(Settings.configLocation).toString(),
 		)
 
@@ -66,7 +69,22 @@ export class Settings {
 		}
 
 		config.templatesSource = templatesSrc
+	
+		return { settings: config, settingsLocation: Settings.configLocation, undoEnabled: config.undoEnabled }
+	}
 
-		return { settings: config, settingsLocation: Settings.configLocation }
+	public static getProperty<K extends keyof ConfigType>(property: K) {
+		const config: ConfigType = JSON.parse(
+			fs.readFileSync(Settings.configLocation).toString(),
+		)
+		return config[property]
+	}
+
+	public static setProperty<K extends keyof ConfigType>(property: K, value: ConfigType[K]) {
+		const config: ConfigType = JSON.parse(
+			fs.readFileSync(Settings.configLocation).toString(),
+		)
+		config[property] = value
+		fs.writeFileSync(Settings.configLocation, JSON.stringify(config, null, 2))
 	}
 }

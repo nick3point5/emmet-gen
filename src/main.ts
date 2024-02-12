@@ -81,6 +81,10 @@ program
 			indexer(rootTemplate.location, true)
 		}
 
+		if (Settings.undoEnabled) {
+			Settings.setProperty('previousEmmet', input)
+		}
+
 		console.log('Done 📂')
 	})
 
